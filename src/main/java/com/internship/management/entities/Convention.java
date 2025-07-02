@@ -1,8 +1,6 @@
 package com.internship.management.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.File;
 
@@ -14,6 +12,14 @@ public class Convention {
     private Long id;
     private File pdfConvention;
     private String state;
-    private Teacher teacher;
+
+
+    @OneToOne
+    @JoinColumn(name = "application_id", unique = true)
     private Application application;
+
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
 }

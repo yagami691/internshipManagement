@@ -1,9 +1,12 @@
 package com.internship.management.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.internship.management.Role;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
@@ -13,4 +16,13 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<Message> sentMessage = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private List<Message> receivedMessage = new ArrayList<>();
 }

@@ -1,8 +1,6 @@
 package com.internship.management.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -14,6 +12,12 @@ public class Message {
     private Long id;
     private String content;
     private LocalDate date;
-    private Admin sender;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
+
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 }

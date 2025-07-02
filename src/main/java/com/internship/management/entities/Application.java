@@ -1,8 +1,6 @@
 package com.internship.management.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.File;
 
@@ -14,7 +12,19 @@ public class Application {
     private Long id;
     private String state;
     private File cv;
-    private File ooverLetter;
+    private File coverLetter;
+
+
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
     private Student student;
+
+    @OneToOne(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Convention convention;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "offer_id", nullable = false)
     private Offer offer;
+
 }

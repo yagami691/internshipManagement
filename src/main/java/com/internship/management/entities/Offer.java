@@ -1,8 +1,9 @@
 package com.internship.management.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Offer {
 
@@ -13,6 +14,12 @@ public class Offer {
     private String title;
     private String description;
     private String domain;
+
+    @ManyToOne
+    @JoinColumn(name = "enterprise_id", nullable = false)
     private Enterprise enterprise;
+
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+    private List<Application> applications = new ArrayList<>();
 
 }
