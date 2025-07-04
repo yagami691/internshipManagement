@@ -7,6 +7,8 @@ import lombok.Setter;
 import java.io.File;
 
 @Entity
+@Getter
+@Setter
 public class Application {
 
     @Id
@@ -16,8 +18,6 @@ public class Application {
     private String state;
     private File cv;
     private File coverLetter;
-
-
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
@@ -29,5 +29,4 @@ public class Application {
     @ManyToOne(optional = false)
     @JoinColumn(name = "offer_id", nullable = false)
     private Offer offer;
-
 }

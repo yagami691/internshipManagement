@@ -8,6 +8,8 @@ import java.io.File;
 
 
 @Entity
+@Getter
+@Setter
 public class Convention {
 
     @Id

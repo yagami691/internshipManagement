@@ -1,11 +1,16 @@
 package com.internship.management.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Offer {
 
     @Id
@@ -15,6 +20,8 @@ public class Offer {
     private String title;
     private String description;
     private String domain;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "enterprise_id", nullable = false)

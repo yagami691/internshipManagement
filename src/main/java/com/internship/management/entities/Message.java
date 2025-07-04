@@ -1,10 +1,14 @@
 package com.internship.management.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
 public class Message {
 
     @Id
@@ -16,9 +20,9 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
-    private User sender;
+    private Users sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
-    private User receiver;
+    private Users receiver;
 }
