@@ -2,9 +2,12 @@ package com.internship.management.entities;
 
 import com.internship.management.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,8 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Users {
 
     @Id
@@ -21,6 +26,14 @@ public class Users {
     private String name;
     private String email;
     private String password;
+    private boolean emailVerified;
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -30,4 +43,7 @@ public class Users {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<Message> receivedMessage = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private VerificationToken verificationToken;
 }
