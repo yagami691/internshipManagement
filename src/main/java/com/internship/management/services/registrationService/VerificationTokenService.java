@@ -31,6 +31,7 @@ public class VerificationTokenService {
     }
 
     public void createAndSendToken(Users user) {
+
         String code = generateCode();
         VerificationToken token = registrationMapper.verificationTokenUpdate(code, user);
 
@@ -40,6 +41,7 @@ public class VerificationTokenService {
 
 
     public Users verifyCode(String email, String inputCode) {
+
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
 

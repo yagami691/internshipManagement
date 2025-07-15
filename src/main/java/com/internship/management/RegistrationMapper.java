@@ -24,9 +24,7 @@ public interface RegistrationMapper {
     @Mapping(target = "role", expression = "java(Role.STUDENT)")
     Student toEntity(StudentRegistrationRequestDto studentRequestDto);
 
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "email", source = "email")
-    @Mapping(target = "password", source = "password")
+
     @Mapping(target = "role", expression = "java(Role.ENTERPRISE)")
     Enterprise toEntity(EnterpriseRegistrationRequestDto enterpriseRequestDto);
 
@@ -44,13 +42,11 @@ public interface RegistrationMapper {
     @Mapping(target = "code", source = "code")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "expirationDate", expression = "java(LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES))")
-    @Mapping(target = "used", constant = "false")
     VerificationToken verificationTokenUpdate(String code, Users user);
 
 
     @Mapping(target = "code", source = "newCode")
     @Mapping(target = "expirationDate", expression = "java(LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES))")
-    @Mapping(target = "used", constant = "false")
     VerificationToken updateToken(@MappingTarget VerificationToken token, String newCode);
 
 
