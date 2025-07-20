@@ -14,6 +14,8 @@ public class Enterprise extends Users {
 
     private String sector;
     private String matriculation;
+
     @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Offer> offers = new ArrayList<>();
+
 }

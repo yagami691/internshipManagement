@@ -1,4 +1,4 @@
-package com.internship.management;
+package com.internship.management.enums;
 
 public enum Role {
 

@@ -14,6 +14,10 @@ public class Teacher extends Users {
 
     private String firstName;
     private String department;
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+
+    @OneToMany(mappedBy = "validatedBy")
+    private List<Offer> validatedOffers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL)
     private List<Convention> conventions = new ArrayList<>();
 }

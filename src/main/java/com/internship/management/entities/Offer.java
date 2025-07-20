@@ -1,5 +1,6 @@
 package com.internship.management.entities;
 
+import com.internship.management.enums.OfferStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +24,20 @@ public class Offer {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    @Enumerated(EnumType.STRING)
+    private OfferStatus offerstatus;
+
     @ManyToOne
     @JoinColumn(name = "enterprise_id", nullable = false)
     private Enterprise enterprise;
 
-    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
-    private List<Application> applications = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private Teacher validatedBy; //
 
+//    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+//    private List<Application> applications = new ArrayList<>();
+
+    @OneToOne(mappedBy = "offer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Convention convention;
 }

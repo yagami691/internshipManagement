@@ -5,9 +5,12 @@ import com.internship.management.dto.registration.EnterpriseRegistrationRequestD
 import com.internship.management.dto.registration.StudentRegistrationRequestDto;
 import com.internship.management.dto.registration.TeacherRegistrationRequestDto;
 import com.internship.management.entities.*;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.time.LocalDateTime;
 
@@ -21,15 +24,19 @@ public interface RegistrationMapper {
 
     UserResponseDto toDto(Teacher teacher);
 
-    @Mapping(target = "role", expression = "java(Role.STUDENT)")
-    Student toEntity(StudentRegistrationRequestDto studentRequestDto);
+    @Mapping(target = "role", expression = "java(com.internship.management.enums.Role.STUDENT)")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(studentRequestDto.getPassword()))")
+    Student toEntity(StudentRegistrationRequestDto studentRequestDto, @Context PasswordEncoder passwordEncoder);
 
 
-    @Mapping(target = "role", expression = "java(Role.ENTERPRISE)")
-    Enterprise toEntity(EnterpriseRegistrationRequestDto enterpriseRequestDto);
 
-    @Mapping(target = "role", expression = "java(Role.TEACHER)")
-    Teacher toEntity(TeacherRegistrationRequestDto teacherRequestDto);
+    @Mapping(target = "role", expression = "java(com.internship.management.enums.Role.ENTERPRISE)")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(enterpriseRequestDto.getPassword()))")
+    Enterprise toEntity(EnterpriseRegistrationRequestDto enterpriseRequestDto, @Context PasswordEncoder passwordEncoder);
+
+    @Mapping(target = "role", expression = "java(com.internship.management.enums.Role.TEACHER)")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(teacherRequestDto.getPassword()))")
+    Teacher toEntity(TeacherRegistrationRequestDto teacherRequestDto, @Context PasswordEncoder passwordEncoder);
 
 
 /*

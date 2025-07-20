@@ -23,10 +23,10 @@ public class Application {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @OneToOne(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Convention convention;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "offer_id", nullable = false)
-    private Offer offer;
+//    @OneToOne(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Convention convention;
+//
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "offer_id", nullable = false)
+//    private Offer offer;
 }

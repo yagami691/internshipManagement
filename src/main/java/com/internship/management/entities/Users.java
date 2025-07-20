@@ -1,6 +1,6 @@
 package com.internship.management.entities;
 
-import com.internship.management.Role;
+import com.internship.management.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

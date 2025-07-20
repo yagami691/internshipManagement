@@ -16,6 +16,7 @@ import com.internship.management.services.registrationService.VerificationTokenS
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,21 +29,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class registrationController {
 
     private final InternshipService internshipService;
-    private final RegistrationMapper internshipMapper;
+    private final RegistrationMapper registrationMapper;
     private final VerificationTokenService verificationTokenService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/registerEnterprise")
     public ResponseEntity<String> create(@Valid @RequestBody EnterpriseRegistrationRequestDto enterpriseRequestDto) {
 
-        Enterprise toEnterpriseEntity = internshipMapper.toEntity(enterpriseRequestDto);
+        Enterprise toEnterpriseEntity = registrationMapper.toEntity(enterpriseRequestDto,passwordEncoder);
         Enterprise registeredEnterprise = internshipService.registerEnterprise(toEnterpriseEntity);
+
         return ResponseEntity.ok().body(registeredEnterprise.getName() + " Company" + " is registered successfully");
     }
 
     @PostMapping("/registerStudent")
     public ResponseEntity<String> create(@Valid @RequestBody StudentRegistrationRequestDto studentRequestDto) {
 
-        Student toStudentEntity = internshipMapper.toEntity(studentRequestDto);
+        Student toStudentEntity = registrationMapper.toEntity(studentRequestDto, passwordEncoder);
         Student registeredStudent = internshipService.registerStudent(toStudentEntity);
 
         return ResponseEntity.ok().body(registeredStudent.getName() + " student" + " is registered successfully");
@@ -51,17 +54,18 @@ public class registrationController {
     @PostMapping("/registerTeacher")
     public ResponseEntity<String> create(@Valid @RequestBody TeacherRegistrationRequestDto teacherRequestDto) {
 
-        Teacher toTeacherEntity = internshipMapper.toEntity(teacherRequestDto);
+        Teacher toTeacherEntity = registrationMapper.toEntity(teacherRequestDto, passwordEncoder);
         Teacher registeredTeacher = internshipService.registerTeacher(toTeacherEntity);
 
-        return ResponseEntity.ok().body(registeredTeacher.getName() + " Company" + " is registered successfully");
+        return ResponseEntity.ok().body(registeredTeacher.getName() + " teacher" + " is registered successfully");
     }
 
     @PostMapping("/verifyEnterpriseEmail")
     public ResponseEntity<UserResponseDto> verifyEnterpriseEmail(@Valid @RequestBody TokenVerificationRequestDto tokenVerificationRequestDto) {
 
            Users userVerified = verificationTokenService.verifyCode(tokenVerificationRequestDto.getEmail(), tokenVerificationRequestDto.getToken());
-           UserResponseDto userResponseDto = internshipMapper.toDto((Enterprise) userVerified);
+           UserResponseDto userResponseDto = registrationMapper.toDto((Enterprise) userVerified);
+
            return ResponseEntity.ok().body(userResponseDto);
     }
 
@@ -70,7 +74,8 @@ public class registrationController {
     public ResponseEntity<UserResponseDto> verifyStudentEmail(@Valid @RequestBody TokenVerificationRequestDto tokenVerificationRequestDto) {
 
         Users userVerified = verificationTokenService.verifyCode(tokenVerificationRequestDto.getEmail(), tokenVerificationRequestDto.getToken());
-        UserResponseDto userResponseDto = internshipMapper.toDto((Student) userVerified);
+        UserResponseDto userResponseDto = registrationMapper.toDto((Student) userVerified);
+
         return ResponseEntity.ok().body(userResponseDto);
     }
 
@@ -79,7 +84,8 @@ public class registrationController {
     public ResponseEntity<UserResponseDto> verifyTeacherEmail(@Valid @RequestBody TokenVerificationRequestDto tokenVerificationRequestDto) {
 
         Users userVerified = verificationTokenService.verifyCode(tokenVerificationRequestDto.getEmail(), tokenVerificationRequestDto.getToken());
-        UserResponseDto userResponseDto = internshipMapper.toDto((Teacher) userVerified);
+        UserResponseDto userResponseDto = registrationMapper.toDto((Teacher) userVerified);
+
         return ResponseEntity.ok().body(userResponseDto);
     }
 
