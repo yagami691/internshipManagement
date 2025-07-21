@@ -1,24 +1,21 @@
-package com.internship.management.dto;
+package com.internship.management.dto.postOffer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.internship.management.entities.Enterprise;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
-@NoArgsConstructor @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OfferRequestDto {
 
     private String title;
     private String description;
     private String domain;
-    private Enterprise enterprise;
+    private MultipartFile file;
     private LocalDate startDate;
     private LocalDate endDate;
 }

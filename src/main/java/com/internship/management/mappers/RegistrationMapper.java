@@ -1,4 +1,4 @@
-package com.internship.management;
+package com.internship.management.mappers;
 
 import com.internship.management.dto.*;
 import com.internship.management.dto.registration.EnterpriseRegistrationRequestDto;

@@ -9,7 +9,7 @@ import com.internship.management.repositories.EnterpriseRepository;
 import com.internship.management.repositories.StudentRepository;
 import com.internship.management.repositories.TeacherRepository;
 import com.internship.management.repositories.UsersRepository;
-import com.internship.management.services.InternshipService;
+import com.internship.management.interfaces.InternshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +61,7 @@ public class RegistrationServiceImpl implements InternshipService {
 
        return teacherRepository.save(teacher);
     }
+
+
 
 }

@@ -1,7 +1,7 @@
 package com.internship.management.controllers;
 
 
-import com.internship.management.RegistrationMapper;
+import com.internship.management.mappers.RegistrationMapper;
 import com.internship.management.dto.UserResponseDto;
 import com.internship.management.dto.registration.EnterpriseRegistrationRequestDto;
 import com.internship.management.dto.registration.StudentRegistrationRequestDto;
@@ -11,7 +11,7 @@ import com.internship.management.entities.Enterprise;
 import com.internship.management.entities.Student;
 import com.internship.management.entities.Teacher;
 import com.internship.management.entities.Users;
-import com.internship.management.services.InternshipService;
+import com.internship.management.interfaces.InternshipService;
 import com.internship.management.services.registrationService.VerificationTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

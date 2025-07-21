@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.File;
+
 
 
 @Entity
@@ -17,19 +17,22 @@ public class Convention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-    private File pdfConvention;
-    private String state;
+
+    @Lob
+    private byte[] pdfConvention;
+
 
     @Enumerated(EnumType.STRING)
-    private ConventionState conventionState;
+    private ConventionState conventionState = ConventionState.PENDING;
 
 //    @OneToOne
 //    @JoinColumn(name = "application_id", unique = true)
 //    private Application application;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
     private Teacher reviewer;
+
 
     @OneToOne
     @JoinColumn(name = "offer_id", unique = true)

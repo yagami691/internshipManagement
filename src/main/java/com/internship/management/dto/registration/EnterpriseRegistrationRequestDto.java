@@ -15,7 +15,6 @@ import jakarta.validation.constraints.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EnterpriseRegistrationRequestDto {
 
-
     @NotBlank(message = "Name is required")
     private String name;
 

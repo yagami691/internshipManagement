@@ -16,8 +16,12 @@ public class Application {
 
     private Long id;
     private String state;
-    private File cv;
-    private File coverLetter;
+
+    @Lob
+    private byte[] cv;
+
+    @Lob
+    private byte[] coverLetter;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)

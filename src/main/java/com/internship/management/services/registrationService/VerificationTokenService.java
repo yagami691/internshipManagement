@@ -1,7 +1,7 @@
 package com.internship.management.services.registrationService;
 
 
-import com.internship.management.RegistrationMapper;
+import com.internship.management.mappers.RegistrationMapper;
 import com.internship.management.entities.Users;
 import com.internship.management.entities.VerificationToken;
 import com.internship.management.repositories.UsersRepository;
@@ -23,8 +23,6 @@ public class VerificationTokenService {
     private final RegistrationMapper registrationMapper;
 
     private final JavaMailSender mailSender;
-
-    private final int EXPIRATION_MINUTES = 10;
 
     public String generateCode() {
         return String.valueOf(new Random().nextInt(90000) + 10000);

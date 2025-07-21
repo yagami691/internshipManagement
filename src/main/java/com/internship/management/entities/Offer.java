@@ -1,5 +1,6 @@
 package com.internship.management.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.internship.management.enums.OfferStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -25,9 +26,10 @@ public class Offer {
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    private OfferStatus offerstatus;
+    private OfferStatus status = OfferStatus.PENDING;;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "enterprise_id", nullable = false)
     private Enterprise enterprise;
 
