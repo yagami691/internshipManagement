@@ -37,6 +37,10 @@ public class VerificationTokenService {
         sendEmail(user.getEmail(), code);
     }
 
+    public void resendToken(Users user) {
+        tokenRepository.deleteByUser(user); // ou marque comme expiré
+        createAndSendToken(user);
+    }
 
     public Users verifyCode(String email, String inputCode) {
 

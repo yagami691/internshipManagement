@@ -5,6 +5,7 @@ package com.internship.management.services.registrationService;
 import com.internship.management.entities.Enterprise;
 import com.internship.management.entities.Student;
 import com.internship.management.entities.Teacher;
+import com.internship.management.entities.Users;
 import com.internship.management.repositories.EnterpriseRepository;
 import com.internship.management.repositories.StudentRepository;
 import com.internship.management.repositories.TeacherRepository;
@@ -62,6 +63,9 @@ public class RegistrationServiceImpl implements InternshipService {
        return teacherRepository.save(teacher);
     }
 
-
+    public Users getUserByEmail(String email) {
+       return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
 }

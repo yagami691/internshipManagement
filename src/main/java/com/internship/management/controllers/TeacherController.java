@@ -1,21 +1,23 @@
 package com.internship.management.controllers;
 
 
+import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferValidationRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.Convention;
 import com.internship.management.entities.Offer;
+import com.internship.management.entities.Student;
 import com.internship.management.entities.Teacher;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class TeacherController {
     public ResponseEntity<List<OfferResponseDto>> getOffersToReviewByDepartment(){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName(); // email extrait du token
+        String email = authentication.getName();
 
         Teacher teacher = postOffer.getTeacherByEmail(email);
 
@@ -48,8 +50,13 @@ public class TeacherController {
 
         Offer offer = postOffer.getOfferById(id);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Teacher teacher = postOffer.getTeacherByEmail(email);
+
         if (offer.getStatus() != OfferStatus.PENDING) {
-            return ResponseEntity.badRequest().body("Offer already processed.");
+            throw new IllegalStateException("Offer already processed.");
         }
 
         offer.setStatus(offerValidationRequest.isOfferApproved() ? OfferStatus.APPROVED : OfferStatus.REJECTED);
@@ -61,7 +68,10 @@ public class TeacherController {
                 convention.setConventionState(offerValidationRequest.isConventionApproved()
                         ? ConventionState.APPROVED
                         : ConventionState.REJECTED);
-               postOffer.saveOffer(offer);
+
+                offer.setValidatedBy(teacher);
+                offer.setConvention(convention);
+                postOffer.saveOffer(offer);
             }
         }
 
@@ -71,6 +81,31 @@ public class TeacherController {
                 + ", Convention: "
                 + (offer.getConvention() != null ? offer.getConvention().getConventionState() : "None"));
     }
+
+
+    @GetMapping("/convention/{id}/download")
+    public ResponseEntity<byte[]> downloadConvention(@PathVariable Long id) {
+        Convention convention = postOffer.getConventionById(id);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=convention.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(convention.getPdfConvention());
+    }
+
+
+
+    @DeleteMapping("/deleteTeacherAccount")
+    public ResponseEntity<String> delete(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Teacher teacher = postOffer.getTeacherByEmail(email);
+        postOffer.deleteUser(teacher.getId());
+
+        return ResponseEntity.ok("Teacher deleted successfully");
+
+    }
+
+
 
 
 }

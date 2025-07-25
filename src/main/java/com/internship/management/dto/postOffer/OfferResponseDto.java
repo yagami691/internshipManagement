@@ -1,7 +1,6 @@
 package com.internship.management.dto.postOffer;
 
 
-import com.internship.management.entities.Enterprise;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +16,6 @@ public class OfferResponseDto {
     private String domain;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Enterprise enterprise;
-    private ConventionRequestDto convention;
+    private EnterpriseOfferResponseDto enterprise;
+    private ConventionResponseDto convention;
 }

@@ -6,7 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ConventionRequestDto {
-    private byte[] file;
+public class ConventionResponseDto {
+    private String state;
+    private boolean hasFile;
 
 }

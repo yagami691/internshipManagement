@@ -1,6 +1,5 @@
 package com.internship.management.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.internship.management.enums.OfferStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,7 +28,6 @@ public class Offer {
     private OfferStatus status = OfferStatus.PENDING;;
 
     @ManyToOne
-    @JsonManagedReference
     @JoinColumn(name = "enterprise_id", nullable = false)
     private Enterprise enterprise;
 
@@ -37,8 +35,8 @@ public class Offer {
     @JoinColumn(name = "teacher_id")
     private Teacher validatedBy; //
 
-//    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
-//    private List<Application> applications = new ArrayList<>();
+    @OneToMany(mappedBy = "offer", cascade = CascadeType.ALL)
+    private List<Application> applications = new ArrayList<>();
 
     @OneToOne(mappedBy = "offer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Convention convention;

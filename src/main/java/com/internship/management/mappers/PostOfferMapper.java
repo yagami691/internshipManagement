@@ -1,12 +1,14 @@
 package com.internship.management.mappers;
 
-import com.internship.management.dto.postOffer.ConventionRequestDto;
+import com.internship.management.dto.application.*;
+import com.internship.management.dto.postOffer.ConventionResponseDto;
+import com.internship.management.dto.postOffer.EnterpriseOfferResponseDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
-import com.internship.management.entities.Convention;
-import com.internship.management.entities.Offer;
+import com.internship.management.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,24 +23,106 @@ public interface PostOfferMapper {
 
     @Named("mapToConvention")
     static Convention mapToConvention(MultipartFile file) throws IOException {
+
         Convention c = new Convention();
         c.setPdfConvention(file.getBytes());
+
         return c;
     }
 
     @Mapping(target = "convention",  qualifiedByName = "conventionToDto")
+    @Mapping(target = "enterprise",qualifiedByName = "enterpriseToDto")
     OfferResponseDto toDto(Offer offer);
 
     @Named("conventionToDto")
-    default ConventionRequestDto mapConvention(Convention c) {
+    default ConventionResponseDto mapConvention(Convention c) {
 
         if (c == null) {
             return null;
         }
-        ConventionRequestDto dto = new ConventionRequestDto();
-        dto.setFile(c.getPdfConvention());
+
+        ConventionResponseDto dto = new ConventionResponseDto();
+        dto.setState(c.getConventionState().name());
+        dto.setHasFile(c.getPdfConvention() != null && c.getPdfConvention().length > 0);
+
         return dto;
     }
 
+    @Named("enterpriseToDto")
+    default EnterpriseOfferResponseDto mapEnterpriseOffer(Enterprise e) {
+
+        if (e == null) {
+            return null;
+        }
+
+        EnterpriseOfferResponseDto dto = new EnterpriseOfferResponseDto();
+
+         dto.setId(e.getId());
+         dto.setEmail(e.getEmail());
+         dto.setName(e.getName());
+         dto.setMatriculation(e.getMatriculation());
+         dto.setSector(e.getSector());
+
+         return dto;
+    }
+
     List<OfferResponseDto> toDtoList(List<Offer> offers);
+
+    @Mapping(source = "coverLetter", target = "coverLetter" , qualifiedByName = "multipartToBytes")
+    @Mapping(source = "cv", target = "cv" , qualifiedByName = "multipartToBytes")
+    Application toEntity(ApplicationRequestDto dto);
+
+    @Named("multipartToBytes")
+    default byte[] map(MultipartFile file) {
+
+        try {
+            return file != null ? file.getBytes() : null;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to convert MultipartFile to byte[]", e);
+        }
+    }
+
+    @Mapping(target = "student", qualifiedByName = "studentToDto" )
+    @Mapping(target = "enterprise", qualifiedByName = "entToDto")
+    @Mapping(target = "hasFiles", source = "application", qualifiedByName = "isFileExist")
+    ApplicationResponseDto toDto(Application application);
+
+    @Named("studentToDto")
+    default StudentApplicationDto mapApplicationStudent(Student s){
+
+        StudentApplicationDto dto = new StudentApplicationDto();
+        dto.setEmail(s.getEmail());
+        dto.setName(s.getName());
+        dto.setFirstName(s.getFirstName());
+
+        return dto;
+    }
+
+    @Named("isFileExist")
+    default HasFilesDto isFileExist(Application application) {
+
+        HasFilesDto hasFile = new HasFilesDto();
+        hasFile.setHasCoverLetter(application.getCoverLetter() != null);
+        hasFile.setHasCV(application.getCv() != null);
+
+        return hasFile;
+
+    }
+
+    @Named("entToDto")
+    default ApplicationEnterpriseDto mapApplicationEnterprise(Enterprise enterprise) {
+
+        ApplicationEnterpriseDto dto = new ApplicationEnterpriseDto();
+        dto.setId(enterprise.getId());
+        dto.setName(enterprise.getName());
+
+        return dto;
+    }
+
+    List<ApplicationResponseDto> toDtoApplicationList(List<Application> applications);
+
+//    @Mapping(source = "coverLetter", target = "coverLetter", qualifiedByName = "multipartToBytes")
+//    @Mapping(source = "cv", target = "cv", qualifiedByName = "multipartToBytes")
+//    Application updateApplication(@MappingTarget Application application, ApplicationRequestDto dto);
+
 }

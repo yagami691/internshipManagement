@@ -1,18 +1,12 @@
 package com.internship.management.services;
 
 
-import com.internship.management.entities.Convention;
-import com.internship.management.entities.Enterprise;
+import com.internship.management.entities.*;
+import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
-import com.internship.management.entities.Offer;
-import com.internship.management.entities.Teacher;
-import com.internship.management.repositories.ConventionRepository;
-import com.internship.management.repositories.EnterpriseRepository;
-import com.internship.management.repositories.OfferRepository;
-import com.internship.management.repositories.TeacherRepository;
+import com.internship.management.repositories.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,15 +19,18 @@ public class OfferService implements PostOffer {
     private final TeacherRepository teacherRepository;
     private final ConventionRepository conventionRepository;
     private final EnterpriseRepository enterpriseRepository;
+    private final StudentRepository studentRepository;
+    private final ApplicationRepository applicationRepository;
+    private final UsersRepository userRepository;
 
     public Offer getOfferById(Long id){
         return offerRepository.findById(id)
                 .orElseThrow(()->  new RuntimeException("Offer Not Found"));
     }
 
-    public Teacher getTeacherById(Long id){
-        return  teacherRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Teacher Not Found"));
+    public Convention getConventionById(Long id){
+        return conventionRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("Convention Not Found"));
     }
 
     public Convention addConvention(Convention convention){
@@ -46,11 +43,6 @@ public class OfferService implements PostOffer {
     }
 
     public Offer saveOffer(Offer offer){
-
-        boolean isExist = offerRepository.existsByTitle(offer.getTitle());
-        if(isExist){
-            throw new RuntimeException("Offer already exists");
-        }
         return offerRepository.save(offer);
     }
 
@@ -68,5 +60,31 @@ public class OfferService implements PostOffer {
     public Enterprise getByEnterpriseEmail(String email){
         return enterpriseRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
+    }
+
+    public List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState){
+        return offerRepository.findOffersByStatusAndConventionState(offerStatus, conventionState);
+    }
+
+    public Student getStudentByEmail(String email){
+        return studentRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Student Not Found"));
+    }
+
+    public void saveApplication(Application application){
+        applicationRepository.save(application);
+    }
+
+    public List<Application> getAllApplicationsByEnterpriseId(Long id){
+        return applicationRepository.findAllByEnterpriseId(id);
+    }
+
+    public Application getApplicationById(Long id){
+        return applicationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application Not Found"));
+    }
+
+    public void deleteUser(Long id){
+        userRepository.deleteById(id);
     }
 }

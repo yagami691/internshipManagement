@@ -17,10 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -88,5 +85,18 @@ public class registrationController {
 
         return ResponseEntity.ok().body(userResponseDto);
     }
+
+    @PostMapping("/resendToken")
+    public ResponseEntity<String> resendToken(@RequestParam String email) {
+        Users user = internshipService.getUserByEmail(email);
+
+        if (user.isEmailVerified()) {
+            return ResponseEntity.badRequest().body("User is already verified");
+        }
+
+        verificationTokenService.resendToken(user);
+        return ResponseEntity.ok("A new token has been sent to your email");
+    }
+
 
 }

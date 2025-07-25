@@ -1,10 +1,9 @@
 package com.internship.management.entities;
 
+import com.internship.management.enums.ApplicationState;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.File;
 
 @Entity
 @Getter
@@ -15,7 +14,9 @@ public class Application {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-    private String state;
+
+    @Enumerated(EnumType.STRING)
+    private ApplicationState state = ApplicationState.PENDING;
 
     @Lob
     private byte[] cv;
@@ -24,13 +25,17 @@ public class Application {
     private byte[] coverLetter;
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "student_id")
     private Student student;
 
 //    @OneToOne(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private Convention convention;
 //
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "offer_id", nullable = false)
-//    private Offer offer;
+    @ManyToOne
+    @JoinColumn(name = "offer_id")
+    private Offer offer;
+
+    @ManyToOne
+    @JoinColumn(name = "enterprise_id")
+    private Enterprise enterprise;
 }
