@@ -21,8 +21,10 @@ public class Offer {
     private String title;
     private String description;
     private String domain;
+    private String sectorOfActivity;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Long durationOfInternship = 6L;
 
     @Enumerated(EnumType.STRING)
     private OfferStatus status = OfferStatus.PENDING;;

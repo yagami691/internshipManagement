@@ -13,6 +13,14 @@ import java.util.List;
 public class Student extends Users {
 
     private String firstName;
+    private String sector;
+    private List<String> languages;
+    private String githubLink;
+    private String linkedinLink;
+
+    @Lob
+    private byte[] photo;
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications = new ArrayList<>();
 }

@@ -25,15 +25,19 @@ public class LoginController {
     private final JwtService jwtService;
     private final UsersRepository userRepository;
 
+
     @PostMapping
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
 
         Users user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!user.isEmailVerified()) {
-            throw new RuntimeException("User is not verified");
-        }
+//        if (!user.isEmailVerified()) {
+//            throw new RuntimeException("User is not verified");
+//        }
+
+
+
 
         Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())

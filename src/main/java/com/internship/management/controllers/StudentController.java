@@ -27,9 +27,35 @@ public class StudentController {
     @GetMapping("/offersByApprovedStatus")
     public List<OfferResponseDto> getOfferByStatus(){
 
-        List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Student student = postOffer.getStudentByEmail(email);
+
+        List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getSector());
         return postOfferMapper.toDtoList(offers);
     }
+
+    @GetMapping("/{offer_id}/filter")
+    public List<OfferResponseDto> filter(@PathVariable Long offer_id, @RequestParam boolean filterByTime,
+                                         @RequestParam boolean filterByLocation){
+
+           Offer offer = postOffer.getOfferById(offer_id);
+
+           if(filterByTime) {
+               List<Offer> offersByDuration = postOffer.getOfferByDurationOfInternship(offer.getDurationOfInternship());
+               return postOfferMapper.toDtoList(offersByDuration);
+           }
+
+           if(filterByLocation) {
+               List<Offer> offersByLocation = postOffer.getOfferByEnterpriseLocation(offer.getEnterprise().getLocation());
+               return postOfferMapper.toDtoList(offersByLocation);
+           }
+
+           return  List.of();
+    }
+
+
 
     @PostMapping("{offer_id}/createApplication")
     public ApplicationResponseDto create(@ModelAttribute ApplicationRequestDto applicationRequestDto, @PathVariable Long offer_id){
@@ -63,7 +89,7 @@ public class StudentController {
 //                 return ResponseEntity.ok("Application updated successfully");
 //    }
 
-    @DeleteMapping("deleteStudentAccount")
+    @DeleteMapping("/deleteStudentAccount")
     public ResponseEntity<String> delete(){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -73,7 +99,4 @@ public class StudentController {
         return ResponseEntity.ok("Student deleted successfully");
 
     }
-
-
-
 }

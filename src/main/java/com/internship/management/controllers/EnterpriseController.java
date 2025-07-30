@@ -2,11 +2,14 @@ package com.internship.management.controllers;
 
 
 import com.internship.management.dto.application.ApplicationResponseDto;
+import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.Application;
 import com.internship.management.entities.Enterprise;
+import com.internship.management.entities.Notification;
 import com.internship.management.entities.Offer;
+import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class EnterpriseController {
 
     private final PostOffer postOffer;
     private final PostOfferMapper postOfferMapper;
+    private final NotificationInterface notificationInterface;
 
     @PostMapping("/createOffer")
     public ResponseEntity<OfferResponseDto> create (@ModelAttribute OfferRequestDto offerRequestDto) {
@@ -62,5 +66,21 @@ public class EnterpriseController {
         return ResponseEntity.ok("enterprise deleted successfully");
 
     }
+
+    @GetMapping("/enterpriseNotifications")
+    public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+
+        List<Notification> unseen = notificationInterface.getAllUnSeenNotificationsByUser(enterprise);
+
+        return ResponseEntity.ok(
+                unseen.stream()
+                        .map(n -> new NotificationDto(n.getId(), n.getMessage(), n.getCreatedAt()))
+                        .toList()
+        );
+    }
+
 
 }

@@ -8,7 +8,6 @@ import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,7 +60,6 @@ public interface PostOfferMapper {
          dto.setEmail(e.getEmail());
          dto.setName(e.getName());
          dto.setMatriculation(e.getMatriculation());
-         dto.setSector(e.getSector());
 
          return dto;
     }

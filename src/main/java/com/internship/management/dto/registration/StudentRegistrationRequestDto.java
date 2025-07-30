@@ -8,13 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentRegistrationRequestDto {
-
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -29,4 +30,14 @@ public class StudentRegistrationRequestDto {
 
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+
+
+    @NotBlank(message = "Sector is required")
+    private String sector;
+
+    private List<String> languages;
+
+    private String githubLink;
+
+    private String linkedinLink;
 }

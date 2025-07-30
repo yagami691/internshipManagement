@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -22,12 +23,24 @@ public class EnterpriseRegistrationRequestDto {
     @NotBlank(message = "Email is required")
     private String email;
 
-    @NotBlank(message = "Sector is required")
-    private String sector;
-
-    @ValidMatriculation
+    @NotBlank(message = "Matriculation is required")
     private String matriculation;
 
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+
+    @NotBlank(message = "Contact is required")
+    private String contact;
+
+    @NotBlank(message = "Location is required")
+    private String location;
+
+    @NotBlank(message = "Country is required")
+    private String country;
+
+    private boolean remote;
+
+    private boolean paying;
+
+    private MultipartFile logo;
 }

@@ -13,6 +13,7 @@ import com.internship.management.repositories.UsersRepository;
 import com.internship.management.interfaces.InternshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,8 @@ public class RegistrationServiceImpl implements InternshipService {
     private final VerificationTokenService verificationTokenService;
     private final UsersRepository userRepository;
 
+
+    @Transactional
    public Enterprise registerEnterprise(Enterprise enterprise) {
 
        boolean isEnterpriseEmailExists = userRepository.existsByEmail(enterprise.getEmail());

@@ -14,12 +14,14 @@ import java.util.Date;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
+
     @Value("${jwt.secret}")
     private String secretKey;
 
     public String generateToken(Users user) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
+                .claim("id", user.getId())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 jour

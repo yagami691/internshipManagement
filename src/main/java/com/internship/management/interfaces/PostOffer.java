@@ -20,7 +20,7 @@ public interface PostOffer {
 
     Convention getConventionById(Long id);
 
-    List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState);
+    List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState, String domain);
 
     Student getStudentByEmail(String email);
 
@@ -28,7 +28,13 @@ public interface PostOffer {
 
     List<Application> getAllApplicationsByEnterpriseId(Long id);
 
-    Application getApplicationById(Long id);
-
     void deleteUser(Long id);
+
+    List<Offer> getOfferByDurationOfInternship(Long durationOfInternship);
+
+    List<Offer> getOfferByEnterpriseLocation(String location);
+
+    Users getUserByEmail(String email);
+
+    void saveUser(Users user);
 }

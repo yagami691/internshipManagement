@@ -12,4 +12,5 @@ public interface InternshipService {
     Teacher registerTeacher(Teacher teacher);
 
     Users getUserByEmail(String email);
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OfferService implements PostOffer {
+public class OfferServiceImpl implements PostOffer {
 
     private final OfferRepository offerRepository;
     private final TeacherRepository teacherRepository;
@@ -31,15 +31,6 @@ public class OfferService implements PostOffer {
     public Convention getConventionById(Long id){
         return conventionRepository.findById(id)
                 .orElseThrow(()->new RuntimeException("Convention Not Found"));
-    }
-
-    public Convention addConvention(Convention convention){
-
-        boolean isExist = conventionRepository.existsByOffer(convention.getOffer());
-        if(isExist){
-            throw new RuntimeException("Convention already exists");
-        }
-        return conventionRepository.save(convention);
     }
 
     public Offer saveOffer(Offer offer){
@@ -62,8 +53,8 @@ public class OfferService implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
     }
 
-    public List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState){
-        return offerRepository.findOffersByStatusAndConventionState(offerStatus, conventionState);
+    public List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState, String domain){
+        return offerRepository.findOffersByStatusAndConventionStateAndDomain(offerStatus, conventionState, domain);
     }
 
     public Student getStudentByEmail(String email){
@@ -85,6 +76,24 @@ public class OfferService implements PostOffer {
     }
 
     public void deleteUser(Long id){
+
         userRepository.deleteById(id);
+    }
+
+    public List<Offer> getOfferByDurationOfInternship(Long durationOfInternship){
+        return offerRepository.findByDurationOfInternship(durationOfInternship);
+    }
+
+    public List<Offer> getOfferByEnterpriseLocation(String location){
+        return offerRepository.findByEnterpriseLocation(location);
+    }
+
+    public Users getUserByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public void saveUser(Users user){
+        userRepository.save(user);
     }
 }
