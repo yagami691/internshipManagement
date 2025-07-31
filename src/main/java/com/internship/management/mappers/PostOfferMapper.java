@@ -12,22 +12,34 @@ import org.mapstruct.Named;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PostOfferMapper {
 
-    @Mapping(target = "convention", source = "file", qualifiedByName = "mapToConvention")
+//    @Mapping(target = "convention", source = "file", qualifiedByName = "mapToConvention")
+    @Mapping(target = "durationOfInternship", expression = "java(mapToDurationOfInternship(dto))")
     Offer toEntity(OfferRequestDto dto);
 
-    @Named("mapToConvention")
-    static Convention mapToConvention(MultipartFile file) throws IOException {
+//    @Named("mapToConvention")
+//    static Convention mapToConvention(MultipartFile file) throws IOException {
+//
+//        Convention c = new Convention();
+//        c.setPdfConvention(file.getBytes());
+//
+//        return c;
+//    }
 
-        Convention c = new Convention();
-        c.setPdfConvention(file.getBytes());
 
-        return c;
+    default Long mapToDurationOfInternship(OfferRequestDto dto) {
+
+        if (dto.getStartDate() != null && dto.getEndDate() != null) {
+            return ChronoUnit.MONTHS.between(dto.getStartDate(), dto.getEndDate());
+        }
+        return 0L;
     }
+
 
     @Mapping(target = "convention",  qualifiedByName = "conventionToDto")
     @Mapping(target = "enterprise",qualifiedByName = "enterpriseToDto")

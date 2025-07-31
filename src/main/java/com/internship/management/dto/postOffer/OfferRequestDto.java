@@ -16,9 +16,8 @@ public class OfferRequestDto {
     private String description;
     private String domain;
     private String sectorOfActivity;
-    private MultipartFile file;
-    private MultipartFile logo;
+    private MultipartFile pdfConvention;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Long durationOfInternship;
+
 }

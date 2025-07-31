@@ -34,6 +34,8 @@ public interface PostOffer {
 
     List<Offer> getOfferByEnterpriseLocation(String location);
 
+    List<Offer> getOfferByEnterpriseId(Long enterpriseId);
+
     Users getUserByEmail(String email);
 
     void saveUser(Users user);

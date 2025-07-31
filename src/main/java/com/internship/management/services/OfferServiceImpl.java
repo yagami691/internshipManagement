@@ -88,6 +88,10 @@ public class OfferServiceImpl implements PostOffer {
         return offerRepository.findByEnterpriseLocation(location);
     }
 
+    public List<Offer> getOfferByEnterpriseId(Long enterpriseId){
+        return offerRepository.findOfferByEnterpriseId(enterpriseId);
+    }
+
     public Users getUserByEmail(String email){
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));

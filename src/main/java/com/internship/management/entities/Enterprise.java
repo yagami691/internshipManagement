@@ -16,7 +16,6 @@ public class Enterprise extends Users {
     private String matriculation;
     private String contact;
     private String location;
-    private String country;
     private boolean remote;
     private boolean paying;
 

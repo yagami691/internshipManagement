@@ -28,5 +28,7 @@ public interface OfferRepository extends JpaRepository<Offer,Long> {
      @Query("SELECT o FROM Offer o WHERE o.enterprise.location = :location")
      List<Offer> findByEnterpriseLocation(@Param("location") String location);
 
+     List<Offer> findOfferByEnterpriseId(Long enterpriseId);
+
 
 }

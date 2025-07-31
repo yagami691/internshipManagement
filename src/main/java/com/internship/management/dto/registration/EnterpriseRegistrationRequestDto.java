@@ -35,9 +35,6 @@ public class EnterpriseRegistrationRequestDto {
     @NotBlank(message = "Location is required")
     private String location;
 
-    @NotBlank(message = "Country is required")
-    private String country;
-
     private boolean remote;
 
     private boolean paying;

@@ -1,12 +1,10 @@
 package com.internship.management.controllers;
 
 
-import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferValidationRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.Convention;
 import com.internship.management.entities.Offer;
-import com.internship.management.entities.Student;
 import com.internship.management.entities.Teacher;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;

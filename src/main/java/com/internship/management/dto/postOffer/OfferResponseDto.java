@@ -1,6 +1,7 @@
 package com.internship.management.dto.postOffer;
 
 
+import com.internship.management.enums.OfferStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class OfferResponseDto {
     private String domain;
     private LocalDate startDate;
     private LocalDate endDate;
+    private OfferStatus status;
     private EnterpriseOfferResponseDto enterprise;
     private ConventionResponseDto convention;
 }

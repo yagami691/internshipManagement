@@ -17,6 +17,7 @@ public class Student extends Users {
     private List<String> languages;
     private String githubLink;
     private String linkedinLink;
+    private boolean onInternship;
 
     @Lob
     private byte[] photo;
