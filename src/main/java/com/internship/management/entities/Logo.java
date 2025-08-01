@@ -21,5 +21,7 @@ public class Logo {
     @OneToOne
     @JoinColumn(name = "enterprise_id")
     private Enterprise enterprise;
+
+    private String contentType;
 }
 

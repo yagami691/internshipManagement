@@ -1,7 +1,6 @@
 package com.internship.management.controllers;
 
 
-import com.internship.management.dto.application.ApplicationRequestDto;
 import com.internship.management.dto.application.ApplicationResponseDto;
 import com.internship.management.dto.application.ApplicationValidationRequestDto;
 import com.internship.management.dto.application.NotificationDto;
@@ -15,6 +14,7 @@ import com.internship.management.mappers.PostOfferMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,7 +79,6 @@ public class EnterpriseController {
         );
     }
 
-
     @GetMapping("/listOfOffers")
     public List<OfferResponseDto> getOffers() {
 
@@ -90,6 +89,21 @@ public class EnterpriseController {
         return postOfferMapper.toDtoList(offersByEnterpriseId);
     }
 
+    @GetMapping("/enterprise/logo")
+    public ResponseEntity<byte[]> getEnterpriseLogo() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+
+        Logo logo = postOffer.getLogoByEnterprise(enterprise);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(logo.getContentType()));
+
+        return new ResponseEntity<>(logo.getLogo(), headers, HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/cv/{id}/download")
     public ResponseEntity<byte[]> downloadCV(@PathVariable Long id) {
@@ -97,7 +111,7 @@ public class EnterpriseController {
         Application application = postOffer.getApplicationById(id);
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student_ CV.pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student_CV.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(application.getCv());
     }
@@ -135,8 +149,6 @@ public class EnterpriseController {
         return  ResponseEntity.ok().body(msg);
 
     }
-
-
 
     @DeleteMapping("deleteEnterpriseAccount")
     public ResponseEntity<String> delete(){

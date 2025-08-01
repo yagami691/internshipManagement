@@ -1,10 +1,7 @@
 package com.internship.management.mappers;
 
 import com.internship.management.dto.application.*;
-import com.internship.management.dto.postOffer.ConventionResponseDto;
-import com.internship.management.dto.postOffer.EnterpriseOfferResponseDto;
-import com.internship.management.dto.postOffer.OfferRequestDto;
-import com.internship.management.dto.postOffer.OfferResponseDto;
+import com.internship.management.dto.postOffer.*;
 import com.internship.management.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,19 +15,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PostOfferMapper {
 
-//    @Mapping(target = "convention", source = "file", qualifiedByName = "mapToConvention")
+
     @Mapping(target = "durationOfInternship", expression = "java(mapToDurationOfInternship(dto))")
     Offer toEntity(OfferRequestDto dto);
-
-//    @Named("mapToConvention")
-//    static Convention mapToConvention(MultipartFile file) throws IOException {
-//
-//        Convention c = new Convention();
-//        c.setPdfConvention(file.getBytes());
-//
-//        return c;
-//    }
-
 
     default Long mapToDurationOfInternship(OfferRequestDto dto) {
 
@@ -67,11 +54,14 @@ public interface PostOfferMapper {
         }
 
         EnterpriseOfferResponseDto dto = new EnterpriseOfferResponseDto();
+        HasLogoDto hasLogoDto = new HasLogoDto();
+        hasLogoDto.setHasLogo(e.getLogo() != null);
 
-         dto.setId(e.getId());
-         dto.setEmail(e.getEmail());
-         dto.setName(e.getName());
-         dto.setMatriculation(e.getMatriculation());
+        dto.setId(e.getId());
+        dto.setEmail(e.getEmail());
+        dto.setName(e.getName());
+        dto.setMatriculation(e.getMatriculation());
+        dto.setHasLogo(hasLogoDto);
 
          return dto;
     }
@@ -119,6 +109,7 @@ public interface PostOfferMapper {
 
     }
 
+
     @Named("entToDto")
     default ApplicationEnterpriseDto mapApplicationEnterprise(Enterprise enterprise) {
 
@@ -130,9 +121,5 @@ public interface PostOfferMapper {
     }
 
     List<ApplicationResponseDto> toDtoApplicationList(List<Application> applications);
-
-//    @Mapping(source = "coverLetter", target = "coverLetter", qualifiedByName = "multipartToBytes")
-//    @Mapping(source = "cv", target = "cv", qualifiedByName = "multipartToBytes")
-//    Application updateApplication(@MappingTarget Application application, ApplicationRequestDto dto);
 
 }

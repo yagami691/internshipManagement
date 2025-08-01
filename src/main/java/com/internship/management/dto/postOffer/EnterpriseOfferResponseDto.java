@@ -13,6 +13,8 @@ public class EnterpriseOfferResponseDto {
     private String name;
     private String email;
     private String sectorOfActivity;
+    private boolean paying;
+    private boolean remote;
     private String matriculation;
-
+    private HasLogoDto hasLogo;
 }

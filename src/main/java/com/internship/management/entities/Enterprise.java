@@ -1,6 +1,6 @@
 package com.internship.management.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,6 @@ public class Enterprise extends Users {
     private boolean paying;
 
     @OneToOne(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private Logo logo;
 
     @OneToMany(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)

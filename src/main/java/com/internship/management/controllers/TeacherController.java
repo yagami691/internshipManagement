@@ -13,7 +13,6 @@ import com.internship.management.interfaces.DepartmentInternshipStat;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
-import com.internship.management.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

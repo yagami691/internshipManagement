@@ -15,6 +15,8 @@ public class OfferResponseDto {
     private String title;
     private String description;
     private String domain;
+    private String job;
+    private Long durationOfInternship;
     private LocalDate startDate;
     private LocalDate endDate;
     private OfferStatus status;

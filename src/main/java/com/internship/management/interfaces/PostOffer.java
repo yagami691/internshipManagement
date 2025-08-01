@@ -28,11 +28,9 @@ public interface PostOffer {
 
     List<Application> getAllApplicationsByEnterpriseId(Long id);
 
+    Enterprise getByEnterpriseId(Long id);
+
     void deleteUser(Long id);
-
-    List<Offer> getOfferByDurationOfInternship(Long durationOfInternship);
-
-    List<Offer> getOfferByEnterpriseLocation(String location);
 
     List<Offer> getOfferByEnterpriseId(Long enterpriseId);
 
@@ -43,4 +41,14 @@ public interface PostOffer {
     Application getApplicationById(Long id);
 
     List<Student> getStudentsByDepartment(String department);
+
+    List<Application> getByApprovedOrRejectedApplication(Long id);
+
+    List<Offer> getOfferPaying(boolean paying);
+
+    List<Offer> getOfferRemote(boolean remote);
+
+    List<Offer> getOfferByPayingAndRemote(boolean paying, boolean remote);
+
+    Logo getLogoByEnterprise(Enterprise enterprise);
 }

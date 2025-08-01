@@ -22,13 +22,15 @@ public interface OfferRepository extends JpaRepository<Offer,Long> {
              @Param("domain") String domain
      );
 
-
-     List<Offer> findByDurationOfInternship(Long durationOfInternship);
-
-     @Query("SELECT o FROM Offer o WHERE o.enterprise.location = :location")
-     List<Offer> findByEnterpriseLocation(@Param("location") String location);
-
      List<Offer> findOfferByEnterpriseId(Long enterpriseId);
 
+     @Query("SELECT o FROM Offer o WHERE o.enterprise.paying = :paying")
+     List<Offer> findOffersByEnterprisePaying(@Param("paying") boolean paying);
+
+     @Query("SELECT o FROM Offer o WHERE o.enterprise.remote = :remote")
+     List<Offer> findOffersByEnterpriseRemote(@Param("remote") boolean remote);
+
+     @Query("SELECT o FROM Offer o WHERE o.enterprise.remote = :remote AND o.enterprise.paying = :paying")
+     List<Offer> findByRemoteAndPaying(@Param("remote") boolean remote, @Param("paying") boolean paying);
 
 }

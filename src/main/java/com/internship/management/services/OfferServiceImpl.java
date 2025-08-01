@@ -2,6 +2,7 @@ package com.internship.management.services;
 
 
 import com.internship.management.entities.*;
+import com.internship.management.enums.ApplicationState;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
@@ -22,6 +23,7 @@ public class OfferServiceImpl implements PostOffer {
     private final StudentRepository studentRepository;
     private final ApplicationRepository applicationRepository;
     private final UsersRepository userRepository;
+    private final LogoRepository logoRepository;
 
     public Offer getOfferById(Long id){
         return offerRepository.findById(id)
@@ -53,6 +55,11 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
     }
 
+    public Enterprise getByEnterpriseId(Long id){
+        return enterpriseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
+    }
+
     public List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState, String domain){
         return offerRepository.findOffersByStatusAndConventionStateAndDomain(offerStatus, conventionState, domain);
     }
@@ -79,17 +86,12 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Application Not Found"));
     }
 
+    public List<Application> getByApprovedOrRejectedApplication(Long id){
+        return applicationRepository.findApprovedOrRejectedApplicationsByStudentId(id);
+    }
+
     public void deleteUser(Long id){
-
         userRepository.deleteById(id);
-    }
-
-    public List<Offer> getOfferByDurationOfInternship(Long durationOfInternship){
-        return offerRepository.findByDurationOfInternship(durationOfInternship);
-    }
-
-    public List<Offer> getOfferByEnterpriseLocation(String location){
-        return offerRepository.findByEnterpriseLocation(location);
     }
 
     public List<Offer> getOfferByEnterpriseId(Long enterpriseId){
@@ -103,6 +105,23 @@ public class OfferServiceImpl implements PostOffer {
 
     public void saveUser(Users user){
         userRepository.save(user);
+    }
+
+    public List<Offer> getOfferPaying(boolean paying){
+        return offerRepository.findOffersByEnterprisePaying(paying);
+    }
+
+    public List<Offer> getOfferRemote(boolean remote){
+        return offerRepository.findOffersByEnterpriseRemote(remote);
+    }
+
+    public List<Offer> getOfferByPayingAndRemote(boolean paying, boolean remote){
+        return offerRepository.findByRemoteAndPaying(paying, remote);
+    }
+
+    public Logo getLogoByEnterprise(Enterprise enterprise){
+        return logoRepository.findByEnterprise(enterprise)
+                .orElseThrow(() -> new RuntimeException("Logo not found"));
     }
 
 }

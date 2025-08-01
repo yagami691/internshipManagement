@@ -3,10 +3,9 @@ package com.internship.management.controllers;
 import com.internship.management.dto.application.ApplicationRequestDto;
 import com.internship.management.dto.application.ApplicationResponseDto;
 import com.internship.management.dto.application.NotificationDto;
-import com.internship.management.dto.offerFiltered.OfferFilterByLocation;
-import com.internship.management.dto.offerFiltered.OfferFilterByTime;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
+import com.internship.management.enums.ApplicationState;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.NotificationInterface;
@@ -36,29 +35,23 @@ public class StudentController {
         String email = authentication.getName();
 
         Student student = postOffer.getStudentByEmail(email);
-
         List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getDepartment());
-        return postOfferMapper.toDtoList(offers);
+
+        return student.isOnInternship() ? List.of() : postOfferMapper.toDtoList(offers);
     }
 //
-//    @GetMapping("/filter")
-//    public List<OfferResponseDto> filter(@RequestParam(required = false) Long time,
-//                                         @RequestParam(required = false) String location) {
-//
-//        if (time != null && (location == null || location.isEmpty())) {
-//            List<Offer> offersByDuration = postOffer.getOfferByDurationOfInternship(time);
-//            return postOfferMapper.toDtoList(offersByDuration);
-//        }
-//
-//        if (location != null && !location.isEmpty() && time == null) {
-//            List<Offer> offersByLocation = postOffer.getOfferByEnterpriseLocation(location);
-//            return postOfferMapper.toDtoList(offersByLocation);
-//        }
-//
-//        return List.of();
-//    }
+    @GetMapping("/filter")
+    public List<OfferResponseDto> filter(@RequestParam Boolean paying,
+                                         @RequestParam Boolean remote) {
 
-    @GetMapping("/teacherNotifications")
+        if(paying != null && remote != null) return postOfferMapper.toDtoList(postOffer.getOfferByPayingAndRemote(paying, remote));
+        if(paying != null) return postOfferMapper.toDtoList(postOffer.getOfferPaying(paying));
+        if(remote != null)  postOfferMapper.toDtoList(postOffer.getOfferRemote(remote));
+
+        return List.of();
+    }
+
+    @GetMapping("/StudentNotifications")
     public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -72,8 +65,6 @@ public class StudentController {
                         .toList()
         );
     }
-
-
 
 
     @PostMapping("{offer_id}/createApplication")
@@ -99,17 +90,23 @@ public class StudentController {
         return postOfferMapper.toDto(application);
     }
 
-//
-//    @PutMapping("/{id}/updateApplication")
-//    public ResponseEntity<String> updateApplication(@PathVariable Long id,
-//                                                    @ModelAttribute ApplicationRequestDto applicationRequestDto) {
-//
-//                 Application application = postOffer.getApplicationById(id);
-//                 postOfferMapper.updateApplication(application, applicationRequestDto);
-//                 postOffer.saveApplication(application);
-//
-//                 return ResponseEntity.ok("Application updated successfully");
-//    }
+     @PutMapping("updateStudentStatus")
+     public ResponseEntity<String> updateStudentStatus(@ModelAttribute ApplicationRequestDto applicationRequestDto){
+
+         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+         Student student = postOffer.getStudentByEmail(email);
+
+        List<Application> applications = postOffer.getByApprovedOrRejectedApplication(student.getId());
+        for(Application application : applications){
+            if(application.getState() ==  ApplicationState.APPROVED){
+                student.setOnInternship(true);
+                return ResponseEntity.ok(student.getName() + " is on internship");
+            };
+        }
+
+        return ResponseEntity.ok(student.getName() +
+                " can still apply because all of his applications was rejected");
+     }
 
     @DeleteMapping("/deleteStudentAccount")
     public ResponseEntity<String> delete(){
