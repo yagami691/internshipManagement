@@ -36,9 +36,6 @@ public class LoginController {
             throw new RuntimeException("User is not verified");
         }
 
-
-
-
         Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
         );

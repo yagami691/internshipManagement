@@ -1,16 +1,21 @@
 package com.internship.management.controllers;
 
 
+import com.internship.management.dto.application.ApplicationRequestDto;
 import com.internship.management.dto.application.ApplicationResponseDto;
+import com.internship.management.dto.application.ApplicationValidationRequestDto;
 import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
+import com.internship.management.enums.ApplicationState;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -59,18 +64,6 @@ public class EnterpriseController {
 
     }
 
-
-    @DeleteMapping("deleteEnterpriseAccount")
-    public ResponseEntity<String> delete(){
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
-        postOffer.deleteUser(enterprise.getId());
-
-        return ResponseEntity.ok("enterprise deleted successfully");
-
-    }
-
     @GetMapping("/enterpriseNotifications")
     public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
 
@@ -98,4 +91,61 @@ public class EnterpriseController {
     }
 
 
+    @GetMapping("/cv/{id}/download")
+    public ResponseEntity<byte[]> downloadCV(@PathVariable Long id) {
+
+        Application application = postOffer.getApplicationById(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student_ CV.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(application.getCv());
+    }
+
+    @GetMapping("/coverLetter/{id}/download")
+    public ResponseEntity<byte[]> downloadCoverLetter(@PathVariable Long id) {
+
+        Application application = postOffer.getApplicationById(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student_coverLetter.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(application.getCoverLetter());
+    }
+
+    @PutMapping("application/{id}/validate")
+    public ResponseEntity<String> validateApplication(@PathVariable Long id,
+                                                      @RequestParam ApplicationValidationRequestDto applicationValidationRequestDto) {
+        Application application = postOffer.getApplicationById(id);
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+
+
+        String msg =  "Your application is " + application.getState() + " and has been reviewed by the " + enterprise.getName();
+
+        if(applicationValidationRequestDto.isApplicationApproved()){
+              application.setState(ApplicationState.APPROVED);
+             notificationInterface.sendNotification(enterprise, msg);
+        }
+
+        application.setState(ApplicationState.REJECTED);
+        notificationInterface.sendNotification(enterprise, msg);
+
+        return  ResponseEntity.ok().body(msg);
+
+    }
+
+
+
+    @DeleteMapping("deleteEnterpriseAccount")
+    public ResponseEntity<String> delete(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+        postOffer.deleteUser(enterprise.getId());
+
+        return ResponseEntity.ok("enterprise deleted successfully");
+
+    }
 }

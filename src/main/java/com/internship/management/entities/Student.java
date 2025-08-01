@@ -14,6 +14,7 @@ public class Student extends Users {
 
     private String firstName;
     private String sector;
+    private String department;
     private List<String> languages;
     private String githubLink;
     private String linkedinLink;

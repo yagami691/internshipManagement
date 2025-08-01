@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                                 "/webjars/**"
                         ).permitAll()
 
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
                         .requestMatchers("/api/enterprise/**").hasRole("ENTERPRISE")
                         .requestMatchers("/api/teacher/**").hasRole("TEACHER")

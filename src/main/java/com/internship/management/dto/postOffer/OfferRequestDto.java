@@ -15,9 +15,7 @@ public class OfferRequestDto {
     private String title;
     private String description;
     private String domain;
-    private String sectorOfActivity;
     private MultipartFile pdfConvention;
     private LocalDate startDate;
     private LocalDate endDate;
-
 }

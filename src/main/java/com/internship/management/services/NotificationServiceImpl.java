@@ -1,18 +1,17 @@
 package com.internship.management.services;
 
-import com.internship.management.entities.Enterprise;
-import com.internship.management.entities.Notification;
-import com.internship.management.entities.Users;
+import com.internship.management.entities.*;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationInterface {
@@ -20,17 +19,43 @@ public class NotificationServiceImpl implements NotificationInterface {
      private final NotificationRepository notificationRepository;
      private final SimpMessagingTemplate messagingTemplate;
 
-     public void sendNotification(Enterprise enterprise, String message) {
+     public void sendNotification(Users user, String message) {
 
           Notification notif = new Notification();
-          notif.setRecipient(enterprise);
+          notif.setRecipient(user);
           notif.setMessage(message);
           notificationRepository.save(notif);
 
-          messagingTemplate.convertAndSend(
-                  "/topic/enterprise/" + enterprise.getId(),
-                  Map.of("content", message)
-          );
+          if(user instanceof Enterprise){
+
+               messagingTemplate.convertAndSend(
+                       "/topic/enterprise/" + user.getId(),
+                       Map.of("content", message)
+               );
+
+               log.info("Sending notification to enterprise ID {} with message: {}", user.getId(), message);
+          }
+
+          if(user instanceof Teacher){
+               messagingTemplate.convertAndSend(
+                       "/topic/teacher/" + user.getId(),
+                       Map.of("content", message)
+               );
+
+               log.info("Sending notification to teacher ID {} with message: {}", user.getId(), message);
+          }
+
+
+          if(user instanceof Student){
+               messagingTemplate.convertAndSend(
+                       "/topic/student/" + user.getId(),
+                       Map.of("content", message)
+               );
+
+               log.info("Sending notification to Student ID {} with message: {}", user.getId(), message);
+          }
+
+
      }
 
      public List<Notification> getAllUnSeenNotificationsByUser(Users user) {

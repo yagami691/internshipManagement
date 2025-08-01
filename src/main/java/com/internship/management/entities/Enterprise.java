@@ -14,6 +14,7 @@ import java.util.List;
 public class Enterprise extends Users {
 
     private String matriculation;
+    private String sectorOfActivity;
     private String contact;
     private String location;
     private boolean remote;

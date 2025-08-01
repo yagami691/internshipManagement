@@ -12,7 +12,7 @@ public class EnterpriseOfferResponseDto {
     private Long id;
     private String name;
     private String email;
-    private String sector;
+    private String sectorOfActivity;
     private String matriculation;
 
 }

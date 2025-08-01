@@ -1,15 +1,19 @@
 package com.internship.management.controllers;
 
 
+import com.internship.management.dto.InternshipStatDto;
+import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferValidationRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
-import com.internship.management.entities.Convention;
-import com.internship.management.entities.Offer;
-import com.internship.management.entities.Teacher;
+import com.internship.management.entities.*;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
+import com.internship.management.interfaces.ChartInterface;
+import com.internship.management.interfaces.DepartmentInternshipStat;
+import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import com.internship.management.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -27,6 +31,8 @@ public class TeacherController {
 
     private final PostOffer postOffer;
     private final PostOfferMapper postOfferMapper;
+    private final NotificationInterface notificationInterface;
+    private final ChartInterface chartInterface;
 
     @GetMapping("/offerToReview")
     public ResponseEntity<List<OfferResponseDto>> getOffersToReviewByDepartment(){
@@ -58,9 +64,10 @@ public class TeacherController {
         }
 
         offer.setStatus(offerValidationRequest.isOfferApproved() ? OfferStatus.APPROVED : OfferStatus.REJECTED);
+        Convention convention;
 
         if (offer.getConvention() != null) {
-            Convention convention = offer.getConvention();
+             convention = offer.getConvention();
 
             if (convention.getConventionState() == ConventionState.PENDING) {
                 convention.setConventionState(offerValidationRequest.isConventionApproved()
@@ -69,11 +76,26 @@ public class TeacherController {
 
                 offer.setValidatedBy(teacher);
                 offer.setConvention(convention);
-                postOffer.saveOffer(offer);
             }
         }
 
        postOffer.saveOffer(offer);
+
+        Enterprise enterprise = offer.getEnterprise();
+
+        String msg =  "Your offer \"" + offer.getTitle() + "\" has been reviewed by the " + offer.getValidatedBy().getName() + " teacher.";
+        notificationInterface.sendNotification(enterprise, msg);
+
+        if(offer.getStatus() == OfferStatus.APPROVED && offer.getConvention().getConventionState() == ConventionState.APPROVED){
+            String studentMsg = "New offer approved by teacher: " + offer.getValidatedBy().getName();
+
+            List<Student> studentsInDepartment = postOffer.getStudentsByDepartment(teacher.getDepartment());
+
+            for (Student s : studentsInDepartment) {
+                notificationInterface.sendNotification(s, studentMsg);
+            }
+
+        }
 
         return ResponseEntity.ok("Offer: " + offer.getStatus()
                 + ", Convention: "
@@ -83,7 +105,9 @@ public class TeacherController {
 
     @GetMapping("/convention/{id}/download")
     public ResponseEntity<byte[]> downloadConvention(@PathVariable Long id) {
+
         Convention convention = postOffer.getConventionById(id);
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=convention.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
@@ -103,7 +127,30 @@ public class TeacherController {
 
     }
 
+    @GetMapping("/internshipsByDepartment")
+    public List<InternshipStatDto> getInternshipStats() {
 
+        List<DepartmentInternshipStat> stats = chartInterface.getInternshipsByDepartment();
+
+        return stats.stream()
+                .map(stat -> new InternshipStatDto(stat.getDepartment(), stat.getCount()))
+                .toList();
+    }
+
+    @GetMapping("/teacherNotifications")
+    public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Teacher teacher = postOffer.getTeacherByEmail(email);
+
+        List<Notification> unseen = notificationInterface.getAllUnSeenNotificationsByUser(teacher);
+
+        return ResponseEntity.ok(
+                unseen.stream()
+                        .map(n -> new NotificationDto(n.getId(), n.getMessage(), n.getCreatedAt()))
+                        .toList()
+        );
+    }
 
 
 }

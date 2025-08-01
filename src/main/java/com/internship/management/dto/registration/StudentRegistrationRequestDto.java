@@ -37,6 +37,8 @@ public class StudentRegistrationRequestDto {
 
     private List<String> languages;
 
+    private String department;
+
     private String githubLink;
 
     private String linkedinLink;

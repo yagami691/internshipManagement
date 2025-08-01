@@ -2,10 +2,14 @@ package com.internship.management.controllers;
 
 import com.internship.management.dto.application.ApplicationRequestDto;
 import com.internship.management.dto.application.ApplicationResponseDto;
+import com.internship.management.dto.application.NotificationDto;
+import com.internship.management.dto.offerFiltered.OfferFilterByLocation;
+import com.internship.management.dto.offerFiltered.OfferFilterByTime;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
+import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,7 @@ public class StudentController {
 
     private final PostOffer postOffer;
     private final PostOfferMapper postOfferMapper;
+    private final NotificationInterface notificationInterface;
 
     @GetMapping("/offersByApprovedStatus")
     public List<OfferResponseDto> getOfferByStatus(){
@@ -32,28 +37,42 @@ public class StudentController {
 
         Student student = postOffer.getStudentByEmail(email);
 
-        List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getSector());
+        List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getDepartment());
         return postOfferMapper.toDtoList(offers);
     }
+//
+//    @GetMapping("/filter")
+//    public List<OfferResponseDto> filter(@RequestParam(required = false) Long time,
+//                                         @RequestParam(required = false) String location) {
+//
+//        if (time != null && (location == null || location.isEmpty())) {
+//            List<Offer> offersByDuration = postOffer.getOfferByDurationOfInternship(time);
+//            return postOfferMapper.toDtoList(offersByDuration);
+//        }
+//
+//        if (location != null && !location.isEmpty() && time == null) {
+//            List<Offer> offersByLocation = postOffer.getOfferByEnterpriseLocation(location);
+//            return postOfferMapper.toDtoList(offersByLocation);
+//        }
+//
+//        return List.of();
+//    }
 
-    @GetMapping("/{offer_id}/filter")
-    public List<OfferResponseDto> filter(@PathVariable Long offer_id, @RequestParam boolean filterByTime,
-                                         @RequestParam boolean filterByLocation){
+    @GetMapping("/teacherNotifications")
+    public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
 
-           Offer offer = postOffer.getOfferById(offer_id);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = postOffer.getStudentByEmail(email);
 
-           if(filterByTime) {
-               List<Offer> offersByDuration = postOffer.getOfferByDurationOfInternship(offer.getDurationOfInternship());
-               return postOfferMapper.toDtoList(offersByDuration);
-           }
+        List<Notification> unseen = notificationInterface.getAllUnSeenNotificationsByUser(student);
 
-           if(filterByLocation) {
-               List<Offer> offersByLocation = postOffer.getOfferByEnterpriseLocation(offer.getEnterprise().getLocation());
-               return postOfferMapper.toDtoList(offersByLocation);
-           }
-
-           return  List.of();
+        return ResponseEntity.ok(
+                unseen.stream()
+                        .map(n -> new NotificationDto(n.getId(), n.getMessage(), n.getCreatedAt()))
+                        .toList()
+        );
     }
+
 
 
 
@@ -73,6 +92,9 @@ public class StudentController {
         application.setOffer(offer);
 
         postOffer.saveApplication(application);
+
+        String enterpriseMsg = "New application received for the offer: " + offer.getTitle();
+        notificationInterface.sendNotification(enterprise, enterpriseMsg);
 
         return postOfferMapper.toDto(application);
     }
@@ -100,3 +122,4 @@ public class StudentController {
 
     }
 }
+

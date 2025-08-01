@@ -62,6 +62,10 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Student Not Found"));
     }
 
+    public List<Student> getStudentsByDepartment(String department){
+        return studentRepository.findByDepartment(department);
+    }
+
     public void saveApplication(Application application){
         applicationRepository.save(application);
     }
@@ -100,4 +104,5 @@ public class OfferServiceImpl implements PostOffer {
     public void saveUser(Users user){
         userRepository.save(user);
     }
+
 }

@@ -39,4 +39,8 @@ public interface PostOffer {
     Users getUserByEmail(String email);
 
     void saveUser(Users user);
+
+    Application getApplicationById(Long id);
+
+    List<Student> getStudentsByDepartment(String department);
 }
