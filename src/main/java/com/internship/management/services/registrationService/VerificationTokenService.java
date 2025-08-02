@@ -1,9 +1,8 @@
 package com.internship.management.services.registrationService;
 
 
+import com.internship.management.entities.*;
 import com.internship.management.mappers.RegistrationMapper;
-import com.internship.management.entities.Users;
-import com.internship.management.entities.VerificationToken;
 import com.internship.management.repositories.UsersRepository;
 import com.internship.management.repositories.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +37,7 @@ public class VerificationTokenService {
     }
 
     public void resendToken(Users user) {
-        tokenRepository.deleteByUser(user); // ou marque comme expiré
+        tokenRepository.deleteByUser(user);
         createAndSendToken(user);
     }
 
@@ -77,9 +76,45 @@ public class VerificationTokenService {
     private void sendEmail(String toEmail, String code) {
 
         SimpleMailMessage message = new SimpleMailMessage();
+
         message.setTo(toEmail);
         message.setSubject("Your account verification code");
         message.setText("Hello, \n\nHere is your verification code: " + code + " \n\nBest regards, Internship Platform.");
+
+        mailSender.send(message);
+    }
+
+    public void sendMsgToUser(String toEmail, Users user){
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        String subject = "";
+        String content = "";
+
+        if(user instanceof Enterprise){
+
+            subject = "Offer validation";
+            content = "Dear " + user.getName() + "," + "\n" +
+            "\n" + "We would like to inform you that your internship offer has been reviewed.\n";
+
+        }
+        if(user instanceof Student) {
+
+            subject = "New Offer Approved";
+            content = "Dear " + user.getName() + "," + "\n" +
+                    "\n" + "We would like to inform you that one internship offer has been " +
+                    "approved by a teacher of your department.\n";
+        }
+        if(user instanceof Teacher) {
+
+            subject = "New Offer Arrival";
+            content = "Dear " + user.getName() + "," + "\n" +
+                    "\n" + "We would like to inform you there is a new offer to review regarding your department.\n";
+        }
+
+        message.setTo(toEmail);
+        message.setSubject(subject);
+        message.setText(content + " \n\nBest regards, Internship Platform.");
 
         mailSender.send(message);
     }

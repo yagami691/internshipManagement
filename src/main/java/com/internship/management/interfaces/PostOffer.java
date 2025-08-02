@@ -51,4 +51,6 @@ public interface PostOffer {
     List<Offer> getOfferByPayingAndRemote(boolean paying, boolean remote);
 
     Logo getLogoByEnterprise(Enterprise enterprise);
+
+    Convention getConventionByOfferId(Long offerId);
 }

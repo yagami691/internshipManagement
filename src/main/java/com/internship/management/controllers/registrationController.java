@@ -38,6 +38,7 @@ public class registrationController {
 
             Logo logo = new Logo();
             logo.setLogo(enterpriseRequestDto.getLogo().getBytes());
+            logo.setContentType(enterpriseRequestDto.getLogo().getContentType());
             logo.setEnterprise(toEnterpriseEntity);
             toEnterpriseEntity.setLogo(logo);
         }

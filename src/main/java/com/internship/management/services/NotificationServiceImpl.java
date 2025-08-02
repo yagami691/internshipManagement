@@ -37,22 +37,27 @@ public class NotificationServiceImpl implements NotificationInterface {
           }
 
           if(user instanceof Teacher){
+               String department =  ((Teacher) user).getDepartment();
+
                messagingTemplate.convertAndSend(
-                       "/topic/teacher/" + user.getId(),
+                       "/topic/department/" + department,
                        Map.of("content", message)
                );
 
-               log.info("Sending notification to teacher ID {} with message: {}", user.getId(), message);
+               log.info("Sending notification to department {} with message: {}", department, message);
           }
 
 
           if(user instanceof Student){
+
+               String department =  ((Student) user).getDepartment();
+
                messagingTemplate.convertAndSend(
-                       "/topic/student/" + user.getId(),
+                       "/topic/student/" + department,
                        Map.of("content", message)
                );
 
-               log.info("Sending notification to Student ID {} with message: {}", user.getId(), message);
+               log.info("Sending notification to Student {} department with message: {}", department, message);
           }
 
 

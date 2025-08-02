@@ -8,6 +8,9 @@ import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.repositories.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -124,4 +127,8 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Logo not found"));
     }
 
+    public Convention getConventionByOfferId(Long offerId){
+        return conventionRepository.findByOffer_Id(offerId)
+                .orElseThrow(() -> new RuntimeException("Convention not found"));
+    }
 }

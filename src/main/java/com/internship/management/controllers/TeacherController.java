@@ -82,8 +82,8 @@ public class TeacherController {
 
         Enterprise enterprise = offer.getEnterprise();
 
-        String msg =  "Your offer \"" + offer.getTitle() + "\" has been reviewed by the " + offer.getValidatedBy().getName() + " teacher.";
-        notificationInterface.sendNotification(enterprise, msg);
+        String enterpriseMsg =  "Your offer \"" + offer.getTitle() + "\" has been reviewed by the " + offer.getValidatedBy().getName() + " teacher.";
+        notificationInterface.sendNotification(enterprise, enterpriseMsg);
 
         if(offer.getStatus() == OfferStatus.APPROVED && offer.getConvention().getConventionState() == ConventionState.APPROVED){
             String studentMsg = "New offer approved by teacher: " + offer.getValidatedBy().getName();
@@ -94,6 +94,9 @@ public class TeacherController {
                 notificationInterface.sendNotification(s, studentMsg);
             }
 
+        }else{
+            enterpriseMsg =  "Your offer \"" + offer.getTitle() + "\" has been rejected by the " + offer.getValidatedBy().getName() + " teacher.";
+            notificationInterface.sendNotification(enterprise, enterpriseMsg);
         }
 
         return ResponseEntity.ok("Offer: " + offer.getStatus()
@@ -102,10 +105,10 @@ public class TeacherController {
     }
 
 
-    @GetMapping("/convention/{id}/download")
+    @GetMapping("/downloadConvention/{id}")
     public ResponseEntity<byte[]> downloadConvention(@PathVariable Long id) {
 
-        Convention convention = postOffer.getConventionById(id);
+        Convention convention = postOffer.getConventionByOfferId(id);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=convention.pdf")

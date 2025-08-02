@@ -89,8 +89,9 @@ public class EnterpriseController {
         return postOfferMapper.toDtoList(offersByEnterpriseId);
     }
 
-    @GetMapping("/enterprise/logo")
+    @GetMapping("/getEnterpriseLogo")
     public ResponseEntity<byte[]> getEnterpriseLogo() {
+
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
@@ -130,21 +131,25 @@ public class EnterpriseController {
     @PutMapping("application/{id}/validate")
     public ResponseEntity<String> validateApplication(@PathVariable Long id,
                                                       @RequestParam ApplicationValidationRequestDto applicationValidationRequestDto) {
+
         Application application = postOffer.getApplicationById(id);
+
+        Student student = application.getStudent();
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
 
-
-        String msg =  "Your application is " + application.getState() + " and has been reviewed by the " + enterprise.getName();
+        String msg =  "Your application has been " + application.getState() + " and has been reviewed by the " + enterprise.getName();
 
         if(applicationValidationRequestDto.isApplicationApproved()){
-              application.setState(ApplicationState.APPROVED);
-             notificationInterface.sendNotification(enterprise, msg);
+
+             application.setState(ApplicationState.APPROVED);
+             notificationInterface.sendNotification(student, msg);
+             log.info("Application has been {} ",  application.getState());
         }
 
         application.setState(ApplicationState.REJECTED);
-        notificationInterface.sendNotification(enterprise, msg);
+        notificationInterface.sendNotification(student, msg);
 
         return  ResponseEntity.ok().body(msg);
 
