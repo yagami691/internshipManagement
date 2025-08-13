@@ -14,11 +14,7 @@ public interface PostOffer {
 
     Teacher getTeacherByEmail(String email);
 
-    List<Offer> getOfferByDepartment(String department, OfferStatus offerStatus);
-
     Enterprise getByEnterpriseEmail(String email);
-
-    Convention getConventionById(Long id);
 
     List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState, String domain);
 
@@ -53,4 +49,8 @@ public interface PostOffer {
     Logo getLogoByEnterprise(Enterprise enterprise);
 
     Convention getConventionByOfferId(Long offerId);
+
+    List<Enterprise> getEnterpriseByPartnership();
+
+    List<Offer> getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(String department, OfferStatus offerStatus);
 }

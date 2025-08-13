@@ -17,8 +17,9 @@ public class OfferRequestDto {
     private String domain;
     private String job;
     private String requirements;
-    private String typeOfInternship;
     private MultipartFile pdfConvention;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String numberOfPlaces;
+    private boolean paying;
 }

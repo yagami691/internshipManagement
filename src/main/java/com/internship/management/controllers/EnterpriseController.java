@@ -2,7 +2,6 @@ package com.internship.management.controllers;
 
 
 import com.internship.management.dto.application.ApplicationResponseDto;
-import com.internship.management.dto.application.ApplicationValidationRequestDto;
 import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
@@ -61,7 +60,6 @@ public class EnterpriseController {
         List<Application> applications = postOffer.getAllApplicationsByEnterpriseId(enterprise.getId());
 
         return postOfferMapper.toDtoApplicationList(applications);
-
     }
 
     @GetMapping("/enterpriseNotifications")
@@ -130,7 +128,7 @@ public class EnterpriseController {
 
     @PutMapping("application/{id}/validate")
     public ResponseEntity<String> validateApplication(@PathVariable Long id,
-                                                      @RequestParam ApplicationValidationRequestDto applicationValidationRequestDto) {
+                                                      @RequestParam boolean approved) {
 
         Application application = postOffer.getApplicationById(id);
 
@@ -139,20 +137,24 @@ public class EnterpriseController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
 
-        String msg =  "Your application has been " + application.getState() + " and has been reviewed by the " + enterprise.getName();
+        String msg = "";
 
-        if(applicationValidationRequestDto.isApplicationApproved()){
+        if(approved){
 
              application.setState(ApplicationState.APPROVED);
+             msg = "Your application has been " + application.getState() + " and reviewed by the " +
+                    enterprise.getName() + " company";
              notificationInterface.sendNotification(student, msg);
              log.info("Application has been {} ",  application.getState());
+        }else{
+
+            application.setState(ApplicationState.REJECTED);
+            msg = "Your application has been " + application.getState() + " and reviewed by the " +
+                    enterprise.getName() + " company";
+            notificationInterface.sendNotification(student, msg);
         }
 
-        application.setState(ApplicationState.REJECTED);
-        notificationInterface.sendNotification(student, msg);
-
         return  ResponseEntity.ok().body(msg);
-
     }
 
     @DeleteMapping("deleteEnterpriseAccount")
@@ -163,6 +165,5 @@ public class EnterpriseController {
         postOffer.deleteUser(enterprise.getId());
 
         return ResponseEntity.ok("enterprise deleted successfully");
-
     }
 }

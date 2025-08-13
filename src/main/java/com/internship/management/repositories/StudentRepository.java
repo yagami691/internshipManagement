@@ -19,5 +19,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<DepartmentInternshipStat> countInternsByDepartment();
 
     List<Student> findByDepartment(String department);
-
 }

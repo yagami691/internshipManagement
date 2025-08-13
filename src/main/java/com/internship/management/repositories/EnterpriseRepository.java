@@ -14,4 +14,8 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise,Long> {
 
     Optional<Enterprise> findByEmail(String email);
 
+    List<Enterprise> findByInPartnershipFalse();
+
+
 }
+

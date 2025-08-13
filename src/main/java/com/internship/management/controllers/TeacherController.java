@@ -2,7 +2,9 @@ package com.internship.management.controllers;
 
 
 import com.internship.management.dto.InternshipStatDto;
+import com.internship.management.dto.StudentResponseDto;
 import com.internship.management.dto.application.NotificationDto;
+import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.dto.postOffer.OfferValidationRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
@@ -33,6 +35,13 @@ public class TeacherController {
     private final NotificationInterface notificationInterface;
     private final ChartInterface chartInterface;
 
+    @GetMapping("/approvalPendingEnterprise")
+    public List<EnterpriseResponseDto> getPendingValidationEnterprise(){
+
+        List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnership();
+        return postOfferMapper.toDtoEnterpriseList(listOfEnterprise);
+    }
+
     @GetMapping("/offerToReview")
     public ResponseEntity<List<OfferResponseDto>> getOffersToReviewByDepartment(){
 
@@ -40,10 +49,19 @@ public class TeacherController {
         String email = authentication.getName();
 
         Teacher teacher = postOffer.getTeacherByEmail(email);
-
-        List<Offer> offers = postOffer.getOfferByDepartment(teacher.getDepartment(), OfferStatus.PENDING);
+        List<Offer> offers = postOffer.getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(teacher.getDepartment(), OfferStatus.PENDING);
 
         return ResponseEntity.ok(postOfferMapper.toDtoList(offers));
+    }
+
+    @PutMapping("/Enterprise/{id}/approve")
+    public ResponseEntity<EnterpriseResponseDto> approveEnterprise(@PathVariable Long id, @RequestParam boolean approved){
+
+        Enterprise enterprise = postOffer.getByEnterpriseId(id);
+        enterprise.setInPartnership(approved);
+        postOffer.saveUser(enterprise);
+
+        return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
     }
 
     @PutMapping("/offers/{id}/validate")
@@ -78,7 +96,7 @@ public class TeacherController {
             }
         }
 
-       postOffer.saveOffer(offer);
+        postOffer.saveOffer(offer);
 
         Enterprise enterprise = offer.getEnterprise();
 
@@ -154,5 +172,17 @@ public class TeacherController {
         );
     }
 
+    @GetMapping("/listOfStudentByDepartment")
+    public List<StudentResponseDto> getStudentByDepartment(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Teacher teacher = postOffer.getTeacherByEmail(email);
+
+        List<Student> students = postOffer.getStudentsByDepartment(teacher.getDepartment());
+        return postOfferMapper.toDtoStudentList(students);
+
+    }
 
 }

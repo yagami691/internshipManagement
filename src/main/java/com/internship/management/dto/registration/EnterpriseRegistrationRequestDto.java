@@ -37,9 +37,9 @@ public class EnterpriseRegistrationRequestDto {
 
     private String sectorOfActivity;
 
-    private boolean remote;
+    private String country;
 
-    private boolean paying;
+    private String city;
 
     private MultipartFile logo;
 }

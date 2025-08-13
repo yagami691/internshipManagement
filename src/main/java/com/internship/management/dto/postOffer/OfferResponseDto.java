@@ -16,10 +16,11 @@ public class OfferResponseDto {
     private String description;
     private String domain;
     private String job;
+    private String numberOfPlaces;
     private Long durationOfInternship;
     private LocalDate startDate;
     private LocalDate endDate;
     private OfferStatus status;
-    private EnterpriseOfferResponseDto enterprise;
+    private EnterpriseResponseDto enterprise;
     private ConventionResponseDto convention;
 }

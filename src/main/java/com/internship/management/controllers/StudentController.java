@@ -12,6 +12,7 @@ import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/student")
 @RequiredArgsConstructor
+@Slf4j
 public class StudentController {
 
     private final PostOffer postOffer;
@@ -36,10 +38,12 @@ public class StudentController {
 
         Student student = postOffer.getStudentByEmail(email);
         List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getDepartment());
+        log.info("value {} ", student.isOnInternship());
+        log.info("value {} ", student.getName());
 
         return student.isOnInternship() ? List.of() : postOfferMapper.toDtoList(offers);
     }
-//
+
     @GetMapping("/filter")
     public List<OfferResponseDto> filter(@RequestParam Boolean paying,
                                          @RequestParam Boolean remote) {
@@ -91,7 +95,7 @@ public class StudentController {
     }
 
      @PutMapping("updateStudentStatus")
-     public ResponseEntity<String> updateStudentStatus(@ModelAttribute ApplicationRequestDto applicationRequestDto){
+     public ResponseEntity<String> updateStudentStatus(){
 
          String email = SecurityContextHolder.getContext().getAuthentication().getName();
          Student student = postOffer.getStudentByEmail(email);
@@ -100,6 +104,7 @@ public class StudentController {
         for(Application application : applications){
             if(application.getState() ==  ApplicationState.APPROVED){
                 student.setOnInternship(true);
+                postOffer.saveUser(student);
                 return ResponseEntity.ok(student.getName() + " is on internship");
             };
         }

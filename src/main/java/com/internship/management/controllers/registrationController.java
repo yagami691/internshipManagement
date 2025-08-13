@@ -12,6 +12,7 @@ import com.internship.management.interfaces.InternshipService;
 import com.internship.management.services.registrationService.VerificationTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class registrationController {
 
         internshipService.registerEnterprise(toEnterpriseEntity);
 
-        return ResponseEntity.ok().body( " Company" + " is registered successfully");
+        return ResponseEntity.ok().body(enterpriseRequestDto.getName() + " Company" + " is registered successfully");
     }
 
     @PostMapping("/registerStudent")

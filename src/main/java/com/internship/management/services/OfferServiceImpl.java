@@ -33,11 +33,6 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(()->  new RuntimeException("Offer Not Found"));
     }
 
-    public Convention getConventionById(Long id){
-        return conventionRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Convention Not Found"));
-    }
-
     public Offer saveOffer(Offer offer){
         return offerRepository.save(offer);
     }
@@ -48,9 +43,8 @@ public class OfferServiceImpl implements PostOffer {
 
     }
 
-    public List<Offer> getOfferByDepartment(String department, OfferStatus offerStatus){
-        return offerRepository.findByDomainAndStatus(department, offerStatus);
-
+    public List<Offer> getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(String department, OfferStatus offerStatus){
+        return offerRepository.findByDomainAndStatusAndEnterprise_InPartnershipTrue(department, offerStatus);
     }
 
     public Enterprise getByEnterpriseEmail(String email){
@@ -61,6 +55,10 @@ public class OfferServiceImpl implements PostOffer {
     public Enterprise getByEnterpriseId(Long id){
         return enterpriseRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
+    }
+
+    public List<Enterprise> getEnterpriseByPartnership(){
+        return enterpriseRepository.findByInPartnershipFalse();
     }
 
     public List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState, String domain){
@@ -111,15 +109,15 @@ public class OfferServiceImpl implements PostOffer {
     }
 
     public List<Offer> getOfferPaying(boolean paying){
-        return offerRepository.findOffersByEnterprisePaying(paying);
+        return offerRepository.findByPaying(paying);
     }
 
     public List<Offer> getOfferRemote(boolean remote){
-        return offerRepository.findOffersByEnterpriseRemote(remote);
+        return offerRepository.findByRemote(remote);
     }
 
     public List<Offer> getOfferByPayingAndRemote(boolean paying, boolean remote){
-        return offerRepository.findByRemoteAndPaying(paying, remote);
+        return offerRepository.findByPayingAndRemote(paying, remote);
     }
 
     public Logo getLogoByEnterprise(Enterprise enterprise){

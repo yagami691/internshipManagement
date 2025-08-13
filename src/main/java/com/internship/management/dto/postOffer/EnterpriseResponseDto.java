@@ -7,14 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EnterpriseOfferResponseDto {
+public class EnterpriseResponseDto {
 
     private Long id;
     private String name;
     private String email;
     private String sectorOfActivity;
-    private boolean paying;
-    private boolean remote;
+    private boolean inPartnership;
     private String matriculation;
     private HasLogoDto hasLogo;
 }

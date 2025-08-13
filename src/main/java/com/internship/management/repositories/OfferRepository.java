@@ -12,7 +12,8 @@ import java.util.List;
 
 public interface OfferRepository extends JpaRepository<Offer,Long> {
 
-     List<Offer> findByDomainAndStatus(String department, OfferStatus status);
+     List<Offer> findByDomainAndStatusAndEnterprise_InPartnershipTrue(String domain, OfferStatus status);
+
 
      @Query("SELECT o FROM Offer o JOIN o.convention c " +
              "WHERE o.status = :offerStatus AND c.conventionState = :conventionState AND o.domain = :domain")
@@ -24,13 +25,9 @@ public interface OfferRepository extends JpaRepository<Offer,Long> {
 
      List<Offer> findOfferByEnterpriseId(Long enterpriseId);
 
-     @Query("SELECT o FROM Offer o WHERE o.enterprise.paying = :paying")
-     List<Offer> findOffersByEnterprisePaying(@Param("paying") boolean paying);
+     List<Offer> findByPaying(boolean paying);
+     List<Offer> findByRemote(boolean Remote);
 
-     @Query("SELECT o FROM Offer o WHERE o.enterprise.remote = :remote")
-     List<Offer> findOffersByEnterpriseRemote(@Param("remote") boolean remote);
-
-     @Query("SELECT o FROM Offer o WHERE o.enterprise.remote = :remote AND o.enterprise.paying = :paying")
-     List<Offer> findByRemoteAndPaying(@Param("remote") boolean remote, @Param("paying") boolean paying);
+     List<Offer> findByPayingAndRemote(boolean paying, boolean remote);
 
 }

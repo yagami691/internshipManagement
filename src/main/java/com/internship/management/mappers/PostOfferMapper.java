@@ -1,5 +1,6 @@
 package com.internship.management.mappers;
 
+import com.internship.management.dto.StudentResponseDto;
 import com.internship.management.dto.application.*;
 import com.internship.management.dto.postOffer.*;
 import com.internship.management.entities.*;
@@ -9,24 +10,12 @@ import org.mapstruct.Named;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PostOfferMapper {
 
-
-    @Mapping(target = "durationOfInternship", expression = "java(mapToDurationOfInternship(dto))")
     Offer toEntity(OfferRequestDto dto);
-
-    default Long mapToDurationOfInternship(OfferRequestDto dto) {
-
-        if (dto.getStartDate() != null && dto.getEndDate() != null) {
-            return ChronoUnit.MONTHS.between(dto.getStartDate(), dto.getEndDate());
-        }
-        return 0L;
-    }
-
 
     @Mapping(target = "convention",  qualifiedByName = "conventionToDto")
     @Mapping(target = "enterprise",qualifiedByName = "enterpriseToDto")
@@ -47,13 +36,13 @@ public interface PostOfferMapper {
     }
 
     @Named("enterpriseToDto")
-    default EnterpriseOfferResponseDto mapEnterpriseOffer(Enterprise e) {
+    default EnterpriseResponseDto mapEnterpriseOffer(Enterprise e) {
 
         if (e == null) {
             return null;
         }
 
-        EnterpriseOfferResponseDto dto = new EnterpriseOfferResponseDto();
+        EnterpriseResponseDto dto = new EnterpriseResponseDto();
         HasLogoDto hasLogoDto = new HasLogoDto();
         hasLogoDto.setHasLogo(e.getLogo() != null);
 
@@ -62,6 +51,8 @@ public interface PostOfferMapper {
         dto.setName(e.getName());
         dto.setMatriculation(e.getMatriculation());
         dto.setHasLogo(hasLogoDto);
+        dto.setInPartnership(e.isInPartnership());
+        dto.setSectorOfActivity(e.getSectorOfActivity());
 
          return dto;
     }
@@ -109,7 +100,6 @@ public interface PostOfferMapper {
 
     }
 
-
     @Named("entToDto")
     default ApplicationEnterpriseDto mapApplicationEnterprise(Enterprise enterprise) {
 
@@ -121,5 +111,11 @@ public interface PostOfferMapper {
     }
 
     List<ApplicationResponseDto> toDtoApplicationList(List<Application> applications);
+
+    List<EnterpriseResponseDto> toDtoEnterpriseList(List<Enterprise> enterpriseList);
+
+    EnterpriseResponseDto toDtoEnterprise(Enterprise enterprise);
+
+    List<StudentResponseDto> toDtoStudentList(List<Student> studentList);
 
 }

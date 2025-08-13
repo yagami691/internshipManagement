@@ -17,8 +17,9 @@ public class Enterprise extends Users {
     private String sectorOfActivity;
     private String contact;
     private String location;
-    private boolean remote;
-    private boolean paying;
+    private String city;
+    private String country;
+    private boolean inPartnership;
 
     @OneToOne(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
     private Logo logo;

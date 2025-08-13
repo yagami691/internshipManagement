@@ -27,7 +27,8 @@ public class Offer {
     private LocalDate endDate;
     private String numberOfPlaces;
     private String requirements;
-    private Long durationOfInternship;
+    private boolean remote;
+    private boolean paying;
 
     @Enumerated(EnumType.STRING)
     private OfferStatus status = OfferStatus.PENDING;;
