@@ -7,6 +7,8 @@ import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.dto.postOffer.OfferValidationRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
+import com.internship.management.dto.profile.EmailRequestDto;
+import com.internship.management.dto.profile.PasswordRequestDto;
 import com.internship.management.entities.*;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
@@ -122,7 +124,6 @@ public class TeacherController {
                 + (offer.getConvention() != null ? offer.getConvention().getConventionState() : "None"));
     }
 
-
     @GetMapping("/downloadConvention/{id}")
     public ResponseEntity<byte[]> downloadConvention(@PathVariable Long id) {
 
@@ -132,19 +133,6 @@ public class TeacherController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=convention.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(convention.getPdfConvention());
-    }
-
-
-
-    @DeleteMapping("/deleteTeacherAccount")
-    public ResponseEntity<String> delete(){
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Teacher teacher = postOffer.getTeacherByEmail(email);
-        postOffer.deleteUser(teacher.getId());
-
-        return ResponseEntity.ok("Teacher deleted successfully");
-
     }
 
     @GetMapping("/internshipsByDepartment")
@@ -185,4 +173,36 @@ public class TeacherController {
 
     }
 
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setPassword(passwordRequestDto.getPassword());
+        postOffer.saveUser(user);
+        return ResponseEntity.ok().body("password updated successfully");
+    }
+
+    @PatchMapping("/updateEmail")
+    public ResponseEntity<String> updateEmail(@RequestBody EmailRequestDto emailRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setEmail(emailRequestDto.getEmail());
+        postOffer.saveUser(user);
+
+        return ResponseEntity.ok().body(user.getName() + " email updated successfully");
+    }
+
+    @DeleteMapping("/deleteTeacherAccount")
+    public ResponseEntity<String> delete(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Teacher teacher = postOffer.getTeacherByEmail(email);
+        postOffer.deleteUser(teacher.getId());
+
+        return ResponseEntity.ok("Teacher deleted successfully");
+    }
 }

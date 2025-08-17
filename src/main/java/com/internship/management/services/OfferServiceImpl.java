@@ -129,4 +129,5 @@ public class OfferServiceImpl implements PostOffer {
         return conventionRepository.findByOffer_Id(offerId)
                 .orElseThrow(() -> new RuntimeException("Convention not found"));
     }
+
 }

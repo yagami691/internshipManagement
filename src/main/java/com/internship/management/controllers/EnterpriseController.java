@@ -5,6 +5,8 @@ import com.internship.management.dto.application.ApplicationResponseDto;
 import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
+import com.internship.management.dto.profile.EmailRequestDto;
+import com.internship.management.dto.profile.PasswordRequestDto;
 import com.internship.management.entities.*;
 import com.internship.management.enums.ApplicationState;
 import com.internship.management.interfaces.NotificationInterface;
@@ -155,6 +157,29 @@ public class EnterpriseController {
         }
 
         return  ResponseEntity.ok().body(msg);
+    }
+
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setPassword(passwordRequestDto.getPassword());
+        postOffer.saveUser(user);
+        return ResponseEntity.ok().body("password updated successfully");
+    }
+
+    @PatchMapping("/updateEmail")
+    public ResponseEntity<String> updateEmail(@RequestBody EmailRequestDto emailRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setEmail(emailRequestDto.getEmail());
+        postOffer.saveUser(user);
+
+        return ResponseEntity.ok().body(user.getName() + "email updated successfully");
     }
 
     @DeleteMapping("deleteEnterpriseAccount")
