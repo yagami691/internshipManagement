@@ -53,4 +53,6 @@ public interface PostOffer {
     List<Enterprise> getEnterpriseByPartnership();
 
     List<Offer> getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(String department, OfferStatus offerStatus);
+
+    void saveConvention(Convention convention);
 }

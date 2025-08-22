@@ -30,7 +30,7 @@ public interface PostOfferMapper {
 
         ConventionResponseDto dto = new ConventionResponseDto();
         dto.setState(c.getConventionState().name());
-        dto.setHasFile(c.getPdfConvention() != null && c.getPdfConvention().length > 0);
+        dto.setFileUrl(c.getFileUrl());
 
         return dto;
     }
@@ -54,7 +54,7 @@ public interface PostOfferMapper {
         dto.setInPartnership(e.isInPartnership());
         dto.setSectorOfActivity(e.getSectorOfActivity());
 
-         return dto;
+        return dto;
     }
 
     List<OfferResponseDto> toDtoList(List<Offer> offers);

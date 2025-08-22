@@ -27,6 +27,7 @@ public class Offer {
     private LocalDate endDate;
     private String numberOfPlaces;
     private String requirements;
+    private LocalDate endOfApplication;
     private boolean remote;
     private boolean paying;
 

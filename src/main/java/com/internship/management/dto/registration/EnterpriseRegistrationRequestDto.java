@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.*;
-import org.springframework.web.multipart.MultipartFile;
+
 
 @Getter
 @Setter
@@ -41,5 +41,4 @@ public class EnterpriseRegistrationRequestDto {
 
     private String city;
 
-    private MultipartFile logo;
 }

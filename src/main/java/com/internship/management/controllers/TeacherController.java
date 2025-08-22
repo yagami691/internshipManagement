@@ -17,9 +17,8 @@ import com.internship.management.interfaces.DepartmentInternshipStat;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import com.internship.management.services.MinioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +35,7 @@ public class TeacherController {
     private final PostOfferMapper postOfferMapper;
     private final NotificationInterface notificationInterface;
     private final ChartInterface chartInterface;
+    private final MinioService minioService;
 
     @GetMapping("/approvalPendingEnterprise")
     public List<EnterpriseResponseDto> getPendingValidationEnterprise(){
@@ -124,15 +124,18 @@ public class TeacherController {
                 + (offer.getConvention() != null ? offer.getConvention().getConventionState() : "None"));
     }
 
-    @GetMapping("/downloadConvention/{id}")
-    public ResponseEntity<byte[]> downloadConvention(@PathVariable Long id) {
 
-        Convention convention = postOffer.getConventionByOfferId(id);
+    @GetMapping("/{offer_id}/pdfConvention")
+    public ResponseEntity<String> getEnterpriseLogo(@PathVariable Long offer_id) {
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=convention.pdf")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(convention.getPdfConvention());
+        Convention convention  = postOffer.getConventionByOfferId(offer_id);
+
+        if (convention.getFileUrl() == null) {
+            return ResponseEntity.badRequest().body("offer has no convention yet");
+        }
+
+        String url = minioService.getFileUrl(convention.getFileUrl());
+        return ResponseEntity.ok(url);
     }
 
     @GetMapping("/internshipsByDepartment")

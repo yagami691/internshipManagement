@@ -31,22 +31,12 @@ public class registrationController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/registerEnterprise")
-    public ResponseEntity<String> create(@Valid @ModelAttribute EnterpriseRegistrationRequestDto enterpriseRequestDto) throws IOException {
+    public ResponseEntity<UserResponseDto> create(@Valid @RequestBody EnterpriseRegistrationRequestDto enterpriseRequestDto){
 
         Enterprise toEnterpriseEntity = registrationMapper.toEntity(enterpriseRequestDto,passwordEncoder);
-
-        if (enterpriseRequestDto.getLogo() != null && !enterpriseRequestDto.getLogo().isEmpty()) {
-
-            Logo logo = new Logo();
-            logo.setLogo(enterpriseRequestDto.getLogo().getBytes());
-            logo.setContentType(enterpriseRequestDto.getLogo().getContentType());
-            logo.setEnterprise(toEnterpriseEntity);
-            toEnterpriseEntity.setLogo(logo);
-        }
-
         internshipService.registerEnterprise(toEnterpriseEntity);
 
-        return ResponseEntity.ok().body(enterpriseRequestDto.getName() + " Company" + " is registered successfully");
+        return ResponseEntity.ok().body(registrationMapper.toDto(toEnterpriseEntity));
     }
 
     @PostMapping("/registerStudent")

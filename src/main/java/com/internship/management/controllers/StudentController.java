@@ -12,6 +12,7 @@ import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import com.internship.management.services.MinioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class StudentController {
     private final PostOffer postOffer;
     private final PostOfferMapper postOfferMapper;
     private final NotificationInterface notificationInterface;
+    private final MinioService minioService;
 
     @GetMapping("/offersByApprovedStatus")
     public List<OfferResponseDto> getOfferByStatus(){
@@ -79,6 +81,12 @@ public class StudentController {
         String email = authentication.getName();
 
         Application application = postOfferMapper.toEntity(applicationRequestDto);
+
+        String cv = minioService.uploadLogo(applicationRequestDto.getCv());
+        String coverLetter = minioService.uploadLogo(applicationRequestDto.getCoverLetter());
+        application.setCoverLetterUrl(coverLetter);
+        application.setCvUrl(cv);
+
         Student student = postOffer.getStudentByEmail(email);
         application.setStudent(student);
 

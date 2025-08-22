@@ -20,6 +20,7 @@ public class Enterprise extends Users {
     private String city;
     private String country;
     private boolean inPartnership;
+    private String logoUrl;
 
     @OneToOne(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
     private Logo logo;

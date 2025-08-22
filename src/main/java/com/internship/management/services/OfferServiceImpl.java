@@ -130,4 +130,8 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Convention not found"));
     }
 
+    public void saveConvention(Convention convention){
+        conventionRepository.save(convention);
+    }
+
 }

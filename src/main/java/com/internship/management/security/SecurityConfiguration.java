@@ -34,6 +34,7 @@ public class SecurityConfiguration {
                                 "/resetPassword",
                                 "/verify",
                                 "/login",
+                                "/logos",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",

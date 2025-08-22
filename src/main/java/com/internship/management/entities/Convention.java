@@ -17,10 +17,7 @@ public class Convention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-
-    @Lob
-    private byte[] pdfConvention;
-
+    private String fileUrl;
 
     @Enumerated(EnumType.STRING)
     private ConventionState conventionState = ConventionState.PENDING;

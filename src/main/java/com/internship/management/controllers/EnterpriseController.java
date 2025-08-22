@@ -12,6 +12,7 @@ import com.internship.management.enums.ApplicationState;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import com.internship.management.services.MinioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,25 +35,19 @@ public class EnterpriseController {
     private final PostOffer postOffer;
     private final PostOfferMapper postOfferMapper;
     private final NotificationInterface notificationInterface;
+    private final MinioService minioService;
 
     @PostMapping("/createOffer")
-    public ResponseEntity<OfferResponseDto> create (@ModelAttribute OfferRequestDto offerRequestDto) throws IOException {
+    public ResponseEntity<OfferResponseDto> create (@RequestBody OfferRequestDto offerRequestDto) {
 
            String email = SecurityContextHolder.getContext().getAuthentication().getName();
            Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
 
            Offer offer = postOfferMapper.toEntity(offerRequestDto);
            offer.setEnterprise(enterprise);
-
-           Convention c = new Convention();
-           c.setPdfConvention(offerRequestDto.getPdfConvention().getBytes());
-           c.setOffer(offer);
-
-           offer.setConvention(c);
            Offer offerCreated = postOffer.saveOffer(offer);
-           OfferResponseDto offerResponseDto = postOfferMapper.toDto(offerCreated);
 
-           return ResponseEntity.ok(offerResponseDto);
+           return ResponseEntity.ok(postOfferMapper.toDto(offerCreated));
     }
 
     @GetMapping("/Applications")
@@ -190,5 +186,23 @@ public class EnterpriseController {
         postOffer.deleteUser(enterprise.getId());
 
         return ResponseEntity.ok("enterprise deleted successfully");
+    }
+
+    @PostMapping("/{offer_id}/pdfConvention")
+    public ResponseEntity<String> uploadPdfConvention(
+            @PathVariable Long offer_id,
+            @RequestParam("file") MultipartFile pdfConvention
+    ) {
+
+        Offer offer = postOffer.getOfferById(offer_id);
+
+        String fileName = minioService.uploadLogo(pdfConvention);
+
+        Convention convention =  new Convention();
+        convention.setOffer(offer);
+        convention.setFileUrl(fileName);
+        postOffer.saveConvention(convention);
+
+        return ResponseEntity.ok("convention uploaded and linked to Offer " + offer.getTitle());
     }
 }

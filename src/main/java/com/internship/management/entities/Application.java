@@ -24,6 +24,9 @@ public class Application {
     @Lob
     private byte[] coverLetter;
 
+    private String cvUrl;
+    private String coverLetterUrl;
+
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;

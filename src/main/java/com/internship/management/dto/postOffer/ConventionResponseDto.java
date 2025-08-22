@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConventionResponseDto {
+
     private String state;
     private boolean hasFile;
-
+    private String fileUrl;
 }
