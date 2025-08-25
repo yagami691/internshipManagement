@@ -4,6 +4,7 @@ package com.internship.management.controllers;
 import com.internship.management.entities.Users;
 import com.internship.management.interfaces.ChartInterface;
 import com.internship.management.interfaces.PostOffer;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 @RestController
 @RequestMapping(path = "/api/admin")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
 public class AdminController {
 
     private final ChartInterface chartInterface;

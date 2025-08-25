@@ -12,6 +12,7 @@ import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequestMapping(path = "api/student")
 @RequiredArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "JWT")
 public class StudentController {
 
     private final PostOffer postOffer;

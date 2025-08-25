@@ -12,6 +12,7 @@ import com.internship.management.enums.ApplicationState;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/enterprise")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
 public class EnterpriseController {
 
     private final PostOffer postOffer;

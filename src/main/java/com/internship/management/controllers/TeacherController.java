@@ -17,6 +17,7 @@ import com.internship.management.interfaces.DepartmentInternshipStat;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path ="api/teacher")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
 public class TeacherController {
 
     private final PostOffer postOffer;

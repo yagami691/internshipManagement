@@ -47,4 +47,8 @@ public class Users {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private VerificationToken verificationToken;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ProfilePhoto profilePhoto;
+
 }
