@@ -1,23 +1,24 @@
 package com.internship.management.controllers;
 
 
+import com.internship.management.dto.postOffer.EnterpriseResponseDto;
+import com.internship.management.entities.Enterprise;
 import com.internship.management.entities.Users;
 import com.internship.management.interfaces.ChartInterface;
 import com.internship.management.interfaces.PostOffer;
+import com.internship.management.mappers.PostOfferMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/admin")
@@ -27,6 +28,7 @@ public class AdminController {
 
     private final ChartInterface chartInterface;
     private final PostOffer postOffer;
+    private final PostOfferMapper postOfferMapper;
 
     @GetMapping("/internships.xlsx")
     public ResponseEntity<byte[]> downloadInternshipsExcel() throws IOException {
@@ -37,6 +39,24 @@ public class AdminController {
                 .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(stream.readAllBytes());
     }
+
+    @GetMapping("/approvalPendingEnterprise")
+    public List<EnterpriseResponseDto> getPendingValidationEnterprise(){
+
+        List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnershipFalse();
+        return postOfferMapper.toDtoEnterpriseList(listOfEnterprise);
+    }
+
+    @PutMapping("/Enterprise/{id}/approve")
+    public ResponseEntity<EnterpriseResponseDto> approveEnterprise(@PathVariable Long id, @RequestParam boolean approved){
+
+        Enterprise enterprise = postOffer.getByEnterpriseId(id);
+        enterprise.setInPartnership(approved);
+        postOffer.saveUser(enterprise);
+
+        return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
+    }
+
 
     @DeleteMapping("/deleteAdminAccount")
     public ResponseEntity<String> delete(){
