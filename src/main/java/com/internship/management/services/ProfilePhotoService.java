@@ -20,7 +20,7 @@ public class ProfilePhotoService {
     private final UsersRepository userRepository;
 
 
-    public void uploadOrUpdateLogo(MultipartFile file, String email) throws IOException {
+    public ProfilePhoto uploadOrUpdateLogo(MultipartFile file, String email) throws IOException {
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("user not found"));
 
@@ -52,7 +52,7 @@ public class ProfilePhotoService {
             profilePhoto.setUser(user);
         }
 
-        profilePhotoRepository.save(profilePhoto);
+        return profilePhotoRepository.save(profilePhoto);
     }
 
     public Optional<ProfilePhoto> getLogoByUserId(Long userId) {
