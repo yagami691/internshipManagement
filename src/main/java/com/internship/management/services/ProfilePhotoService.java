@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,7 @@ public class ProfilePhotoService {
     private final UsersRepository userRepository;
 
 
-    public ProfilePhoto uploadOrUpdateLogo(MultipartFile file, String email) throws IOException {
+    public void uploadOrUpdateLogo(MultipartFile file, String email) throws IOException {
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("user not found"));
 
@@ -29,7 +30,7 @@ public class ProfilePhotoService {
             throw new RuntimeException("empty file");
         }
 
-        if (!file.getContentType().startsWith("image/")) {
+        if (!Objects.requireNonNull(file.getContentType()).startsWith("image/")) {
             throw new RuntimeException("Images are authorised only");
         }
 
@@ -52,7 +53,7 @@ public class ProfilePhotoService {
             profilePhoto.setUser(user);
         }
 
-        return profilePhotoRepository.save(profilePhoto);
+        profilePhotoRepository.save(profilePhoto);
     }
 
     public Optional<ProfilePhoto> getLogoByUserId(Long userId) {

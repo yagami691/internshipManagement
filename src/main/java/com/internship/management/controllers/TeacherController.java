@@ -39,13 +39,6 @@ public class TeacherController {
     private final NotificationInterface notificationInterface;
     private final ChartInterface chartInterface;
 
-    @GetMapping("/approvalPendingEnterprise")
-    public List<EnterpriseResponseDto> getPendingValidationEnterprise(){
-
-        List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnership();
-        return postOfferMapper.toDtoEnterpriseList(listOfEnterprise);
-    }
-
     @GetMapping("/offerToReview")
     public ResponseEntity<List<OfferResponseDto>> getOffersToReviewByDepartment(){
 
@@ -56,16 +49,6 @@ public class TeacherController {
         List<Offer> offers = postOffer.getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(teacher.getDepartment(), OfferStatus.PENDING);
 
         return ResponseEntity.ok(postOfferMapper.toDtoList(offers));
-    }
-
-    @PutMapping("/Enterprise/{id}/approve")
-    public ResponseEntity<EnterpriseResponseDto> approveEnterprise(@PathVariable Long id, @RequestParam boolean approved){
-
-        Enterprise enterprise = postOffer.getByEnterpriseId(id);
-        enterprise.setInPartnership(approved);
-        postOffer.saveUser(enterprise);
-
-        return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
     }
 
     @PutMapping("/offers/{id}/validate")
@@ -88,7 +71,7 @@ public class TeacherController {
         Convention convention;
 
         if (offer.getConvention() != null) {
-             convention = offer.getConvention();
+            convention = offer.getConvention();
 
             if (convention.getConventionState() == ConventionState.PENDING) {
                 convention.setConventionState(offerValidationRequest.isConventionApproved()
@@ -124,17 +107,6 @@ public class TeacherController {
         return ResponseEntity.ok("Offer: " + offer.getStatus()
                 + ", Convention: "
                 + (offer.getConvention() != null ? offer.getConvention().getConventionState() : "None"));
-    }
-
-    @GetMapping("/downloadConvention/{id}")
-    public ResponseEntity<byte[]> downloadConvention(@PathVariable Long id) {
-
-        Convention convention = postOffer.getConventionByOfferId(id);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=convention.pdf")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(convention.getPdfConvention());
     }
 
     @GetMapping("/internshipsByDepartment")
@@ -175,36 +147,4 @@ public class TeacherController {
 
     }
 
-    @PatchMapping("/updatePassword")
-    public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
-
-        user.setPassword(passwordRequestDto.getPassword());
-        postOffer.saveUser(user);
-        return ResponseEntity.ok().body("password updated successfully");
-    }
-
-    @PatchMapping("/updateEmail")
-    public ResponseEntity<String> updateEmail(@RequestBody EmailRequestDto emailRequestDto) {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
-
-        user.setEmail(emailRequestDto.getEmail());
-        postOffer.saveUser(user);
-
-        return ResponseEntity.ok().body(user.getName() + " email updated successfully");
-    }
-
-    @DeleteMapping("/deleteTeacherAccount")
-    public ResponseEntity<String> delete(){
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Teacher teacher = postOffer.getTeacherByEmail(email);
-        postOffer.deleteUser(teacher.getId());
-
-        return ResponseEntity.ok("Teacher deleted successfully");
-    }
 }

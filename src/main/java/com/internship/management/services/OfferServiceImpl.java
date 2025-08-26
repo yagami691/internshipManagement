@@ -57,7 +57,7 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
     }
 
-    public List<Enterprise> getEnterpriseByPartnership(){
+    public List<Enterprise> getEnterpriseByPartnershipFalse(){
         return enterpriseRepository.findByInPartnershipFalse();
     }
 

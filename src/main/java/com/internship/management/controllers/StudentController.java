@@ -97,11 +97,11 @@ public class StudentController {
         return postOfferMapper.toDto(application);
     }
 
-     @PutMapping("updateStudentStatus")
-     public ResponseEntity<String> updateStudentStatus(){
+    @PutMapping("updateStudentStatus")
+    public ResponseEntity<String> updateStudentStatus(){
 
-         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-         Student student = postOffer.getStudentByEmail(email);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = postOffer.getStudentByEmail(email);
 
         List<Application> applications = postOffer.getByApprovedOrRejectedApplication(student.getId());
         for(Application application : applications){
@@ -114,30 +114,6 @@ public class StudentController {
 
         return ResponseEntity.ok(student.getName() +
                 " can still apply because all of his applications was rejected");
-     }
-
-
-    @PatchMapping("/updatePassword")
-    public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
-
-        user.setPassword(passwordRequestDto.getPassword());
-        postOffer.saveUser(user);
-        return ResponseEntity.ok().body("password updated successfully");
-    }
-
-    @PatchMapping("/updateEmail")
-    public ResponseEntity<String> updateEmail(@RequestBody EmailRequestDto emailRequestDto) {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
-
-        user.setEmail(emailRequestDto.getEmail());
-        postOffer.saveUser(user);
-
-        return ResponseEntity.ok().body(user.getName() + " student email updated successfully");
     }
 
 
@@ -179,16 +155,4 @@ public class StudentController {
 
         return  ResponseEntity.ok().body("github link updated successfully");
     }
-
-    @DeleteMapping("/deleteStudentAccount")
-    public ResponseEntity<String> delete(){
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Student Student = postOffer.getStudentByEmail(email);
-        postOffer.deleteUser(Student.getId());
-
-        return ResponseEntity.ok("Student deleted successfully");
-
-    }
 }
-
