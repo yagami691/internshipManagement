@@ -91,6 +91,45 @@ public class EnterpriseController {
         return postOfferMapper.toDtoList(offersByEnterpriseId);
     }
 
+    @GetMapping("/getEnterpriseLogo")
+    public ResponseEntity<byte[]> getEnterpriseLogo() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+
+        Logo logo = postOffer.getLogoByEnterprise(enterprise);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(logo.getContentType()));
+
+        return new ResponseEntity<>(logo.getLogo(), headers, HttpStatus.OK);
+    }
+
+
+
+    @GetMapping("/cv/{id}/download")
+    public ResponseEntity<byte[]> downloadCV(@PathVariable Long id) {
+
+        Application application = postOffer.getApplicationById(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student_CV.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(application.getCv());
+    }
+
+    @GetMapping("/coverLetter/{id}/download")
+    public ResponseEntity<byte[]> downloadCoverLetter(@PathVariable Long id) {
+
+        Application application = postOffer.getApplicationById(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=student_coverLetter.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(application.getCoverLetter());
+    }
+
     @PutMapping("application/{id}/validate")
     public ResponseEntity<String> validateApplication(@PathVariable Long id,
                                                       @RequestParam boolean approved) {
@@ -120,5 +159,38 @@ public class EnterpriseController {
         }
 
         return  ResponseEntity.ok().body(msg);
+    }
+
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setPassword(passwordRequestDto.getPassword());
+        postOffer.saveUser(user);
+        return ResponseEntity.ok().body("password updated successfully");
+    }
+
+    @PatchMapping("/updateEmail")
+    public ResponseEntity<String> updateEmail(@RequestBody EmailRequestDto emailRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setEmail(emailRequestDto.getEmail());
+        postOffer.saveUser(user);
+
+        return ResponseEntity.ok().body(user.getName() + "email updated successfully");
+    }
+
+    @DeleteMapping("deleteEnterpriseAccount")
+    public ResponseEntity<String> delete(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+        postOffer.deleteUser(enterprise.getId());
+
+        return ResponseEntity.ok("enterprise deleted successfully");
     }
 }

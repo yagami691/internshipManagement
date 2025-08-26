@@ -50,7 +50,7 @@ public interface PostOffer {
 
     Convention getConventionByOfferId(Long offerId);
 
-    List<Enterprise> getEnterpriseByPartnershipFalse();
+    List<Enterprise> getEnterpriseByPartnership();
 
     List<Offer> getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(String department, OfferStatus offerStatus);
 }

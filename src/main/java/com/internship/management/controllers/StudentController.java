@@ -117,6 +117,30 @@ public class StudentController {
      }
 
 
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setPassword(passwordRequestDto.getPassword());
+        postOffer.saveUser(user);
+        return ResponseEntity.ok().body("password updated successfully");
+    }
+
+    @PatchMapping("/updateEmail")
+    public ResponseEntity<String> updateEmail(@RequestBody EmailRequestDto emailRequestDto) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setEmail(emailRequestDto.getEmail());
+        postOffer.saveUser(user);
+
+        return ResponseEntity.ok().body(user.getName() + " student email updated successfully");
+    }
+
+
     @PatchMapping("updateLanguages")
     public ResponseEntity<String> updateLanguages(@RequestBody LanguageRequestDto languageRequestDto) {
 
@@ -154,6 +178,17 @@ public class StudentController {
         postOffer.saveUser(student);
 
         return  ResponseEntity.ok().body("github link updated successfully");
+    }
+
+    @DeleteMapping("/deleteStudentAccount")
+    public ResponseEntity<String> delete(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student Student = postOffer.getStudentByEmail(email);
+        postOffer.deleteUser(Student.getId());
+
+        return ResponseEntity.ok("Student deleted successfully");
+
     }
 }
 
