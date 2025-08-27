@@ -7,6 +7,8 @@ import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.repositories.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -130,7 +132,19 @@ public class OfferServiceImpl implements PostOffer {
         return teacherRepository.findAll();
     }
 
+    public Page<Teacher> getAllTeacherByPagination(Pageable pageable){
+        return teacherRepository.findAll(pageable);
+    }
+
     public List<Student> getAllStudent(){
         return studentRepository.findAll();
+    }
+
+    public Page<Student> getAllStudentByPagination(Pageable pageable){
+        return studentRepository.findAll(pageable);
+    }
+
+    public void saveConvention (Convention convention){
+        conventionRepository.save(convention);
     }
 }

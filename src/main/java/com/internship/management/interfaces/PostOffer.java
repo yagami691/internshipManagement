@@ -3,6 +3,8 @@ package com.internship.management.interfaces;
 import com.internship.management.entities.*;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -57,4 +59,10 @@ public interface PostOffer {
     List<Teacher> getAllTeachers();
 
     List<Student> getAllStudent();
+
+    void saveConvention (Convention convention);
+
+    Page<Teacher> getAllTeacherByPagination(Pageable pageable);
+
+    Page<Student> getAllStudentByPagination(Pageable pageable);
 }

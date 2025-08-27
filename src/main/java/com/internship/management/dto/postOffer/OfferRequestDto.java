@@ -23,5 +23,4 @@ public class OfferRequestDto {
     private boolean paying;
     private boolean remote;
     private String typeOfInternship;
-    private MultipartFile pdfConvention;
 }
