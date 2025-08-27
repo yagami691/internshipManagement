@@ -33,7 +33,7 @@ public class EnterpriseController {
     private final NotificationInterface notificationInterface;
 
     @PostMapping("/createOffer")
-    public ResponseEntity<String> create (@RequestBody OfferRequestDto offerRequestDto){
+    public ResponseEntity<OfferResponseDto> create (@RequestBody OfferRequestDto offerRequestDto){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
@@ -42,7 +42,7 @@ public class EnterpriseController {
         offer.setEnterprise(enterprise);
 
         postOffer.saveOffer(offer);
-        return ResponseEntity.ok(offer.getTitle() +  " created successfully without pdfConvention");
+        return ResponseEntity.ok(postOfferMapper.toDto(offer));
     }
 
     @PostMapping( "/{offerId}/convention")
