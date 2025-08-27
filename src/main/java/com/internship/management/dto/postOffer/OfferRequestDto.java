@@ -19,7 +19,7 @@ public class OfferRequestDto {
     private String requirements;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String numberOfPlaces;
+    private Integer numberOfPlaces;
     private boolean paying;
     private boolean remote;
     private String typeOfInternship;
