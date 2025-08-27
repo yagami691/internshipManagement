@@ -1,8 +1,12 @@
 package com.internship.management.controllers;
 
 
+import com.internship.management.dto.StudentResponseDto;
+import com.internship.management.dto.TeacherResponseDto;
 import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.entities.Enterprise;
+import com.internship.management.entities.Student;
+import com.internship.management.entities.Teacher;
 import com.internship.management.entities.Users;
 import com.internship.management.interfaces.ChartInterface;
 import com.internship.management.interfaces.PostOffer;
@@ -45,6 +49,20 @@ public class AdminController {
 
         List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnershipFalse();
         return postOfferMapper.toDtoEnterpriseList(listOfEnterprise);
+    }
+
+    @GetMapping("/allTeachers")
+    public ResponseEntity<List<TeacherResponseDto>> getAllTeachers(){
+
+        List<Teacher> teachers = postOffer.getAllTeachers();
+        return ResponseEntity.ok(postOfferMapper.toDtoTeacherList(teachers));
+    }
+
+    @GetMapping("/allStudent")
+    public ResponseEntity<List<StudentResponseDto>> getAllStudents(){
+
+        List<Student> students = postOffer.getAllStudent();
+        return ResponseEntity.ok(postOfferMapper.toDtoStudentList(students));
     }
 
     @PutMapping("/Enterprise/{id}/approve")

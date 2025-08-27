@@ -2,15 +2,11 @@ package com.internship.management.services;
 
 
 import com.internship.management.entities.*;
-import com.internship.management.enums.ApplicationState;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.repositories.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +29,8 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(()->  new RuntimeException("Offer Not Found"));
     }
 
-    public Offer saveOffer(Offer offer){
-        return offerRepository.save(offer);
+    public void saveOffer(Offer offer){
+        offerRepository.save(offer);
     }
 
     public Teacher getTeacherByEmail(String email){
@@ -130,4 +126,11 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Convention not found"));
     }
 
+    public List<Teacher> getAllTeachers(){
+        return teacherRepository.findAll();
+    }
+
+    public List<Student> getAllStudent(){
+        return studentRepository.findAll();
+    }
 }

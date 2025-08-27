@@ -13,4 +13,6 @@ public interface InternshipService {
 
     Users getUserByEmail(String email);
 
+    void saveLogo(Logo logo);
+
 }

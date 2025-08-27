@@ -40,13 +40,15 @@ public class EnterpriseController {
         Offer offer = postOfferMapper.toEntity(offerRequestDto);
         offer.setEnterprise(enterprise);
 
-        Convention c = new Convention();
-        c.setPdfConvention(offerRequestDto.getPdfConvention().getBytes());
-        c.setOffer(offer);
+        if (offerRequestDto.getPdfConvention() != null && !offerRequestDto.getPdfConvention().isEmpty()) {
+            Convention c = new Convention();
+            c.setPdfConvention(offerRequestDto.getPdfConvention().getBytes());
+            c.setOffer(offer);
+            offer.setConvention(c);
+        }
 
-        offer.setConvention(c);
-        Offer offerCreated = postOffer.saveOffer(offer);
-        OfferResponseDto offerResponseDto = postOfferMapper.toDto(offerCreated);
+        postOffer.saveOffer(offer);
+        OfferResponseDto offerResponseDto = postOfferMapper.toDto(offer);
 
         return ResponseEntity.ok(offerResponseDto);
     }

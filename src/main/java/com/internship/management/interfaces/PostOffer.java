@@ -10,7 +10,7 @@ public interface PostOffer {
 
     Offer getOfferById(Long id);
 
-    Offer saveOffer(Offer offer);
+    void saveOffer(Offer offer);
 
     Teacher getTeacherByEmail(String email);
 
@@ -53,4 +53,8 @@ public interface PostOffer {
     List<Enterprise> getEnterpriseByPartnershipFalse();
 
     List<Offer> getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(String department, OfferStatus offerStatus);
+
+    List<Teacher> getAllTeachers();
+
+    List<Student> getAllStudent();
 }

@@ -41,6 +41,8 @@ public class registrationController {
             logo.setContentType(enterpriseRequestDto.getLogo().getContentType());
             logo.setEnterprise(toEnterpriseEntity);
             toEnterpriseEntity.setLogo(logo);
+
+            internshipService.saveLogo(logo);
         }
 
         internshipService.registerEnterprise(toEnterpriseEntity);

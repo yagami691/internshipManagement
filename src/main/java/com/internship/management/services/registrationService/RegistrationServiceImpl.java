@@ -2,14 +2,8 @@ package com.internship.management.services.registrationService;
 
 
 
-import com.internship.management.entities.Enterprise;
-import com.internship.management.entities.Student;
-import com.internship.management.entities.Teacher;
-import com.internship.management.entities.Users;
-import com.internship.management.repositories.EnterpriseRepository;
-import com.internship.management.repositories.StudentRepository;
-import com.internship.management.repositories.TeacherRepository;
-import com.internship.management.repositories.UsersRepository;
+import com.internship.management.entities.*;
+import com.internship.management.repositories.*;
 import com.internship.management.interfaces.InternshipService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +18,7 @@ public class RegistrationServiceImpl implements InternshipService {
     private final TeacherRepository teacherRepository;
     private final VerificationTokenService verificationTokenService;
     private final UsersRepository userRepository;
+    private final LogoRepository logoRepository;
 
 
     @Transactional
@@ -71,4 +66,7 @@ public class RegistrationServiceImpl implements InternshipService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public void saveLogo(Logo logo){
+        logoRepository.save(logo);
+    }
 }

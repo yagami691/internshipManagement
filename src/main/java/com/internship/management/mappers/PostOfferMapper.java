@@ -1,6 +1,7 @@
 package com.internship.management.mappers;
 
 import com.internship.management.dto.StudentResponseDto;
+import com.internship.management.dto.TeacherResponseDto;
 import com.internship.management.dto.application.*;
 import com.internship.management.dto.postOffer.*;
 import com.internship.management.entities.*;
@@ -117,5 +118,7 @@ public interface PostOfferMapper {
     EnterpriseResponseDto toDtoEnterprise(Enterprise enterprise);
 
     List<StudentResponseDto> toDtoStudentList(List<Student> studentList);
+
+    List<TeacherResponseDto> toDtoTeacherList(List<Teacher> teacherList);
 
 }

@@ -5,11 +5,11 @@ import com.internship.management.dto.profile.EmailRequestDto;
 import com.internship.management.dto.profile.PasswordRequestDto;
 import com.internship.management.entities.Users;
 import com.internship.management.interfaces.PostOffer;
-import com.internship.management.mappers.PostOfferMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UpdateProfileUser {
 
     private final PostOffer postOffer;
+    private final PasswordEncoder passwordEncoder;
 
     @PatchMapping("/updatePassword")
     public ResponseEntity<String> updatePassword(@RequestBody PasswordRequestDto passwordRequestDto) {
@@ -41,6 +42,11 @@ public class UpdateProfileUser {
         postOffer.saveUser(user);
 
         return ResponseEntity.ok().body(user.getName() + " email updated successfully");
+    }
+
+    @GetMapping("/getUserEmail")
+    public ResponseEntity<String> getUserEmail(){
+        return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     @DeleteMapping("/deleteTeacherAccount")
