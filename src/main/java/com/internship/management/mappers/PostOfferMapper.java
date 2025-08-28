@@ -11,6 +11,7 @@ import org.mapstruct.Named;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -115,7 +116,39 @@ public interface PostOfferMapper {
 
     List<EnterpriseResponseDto> toDtoEnterpriseList(List<Enterprise> enterpriseList);
 
+    @Mapping(target = "offers", source = "enterprise", qualifiedByName = "toMiniOfferResponseDtoList")
+    @Mapping(target ="hasLogo", source = "enterprise", qualifiedByName = "toMapHasLogoDto")
     EnterpriseResponseDto toDtoEnterprise(Enterprise enterprise);
+
+    @Named("toMiniOfferResponseDtoList")
+    default List<MiniOfferResponseDto> mapEnterpriseToMiniOffer(Enterprise e) {
+        if (e == null || e.getOffers() == null) {
+            return new ArrayList<>();
+        }
+
+        List<MiniOfferResponseDto> list = new ArrayList<>(e.getOffers().size());
+        for (Offer offer : e.getOffers()) {
+            MiniOfferResponseDto dto = new MiniOfferResponseDto();
+            dto.setId(offer.getId());
+            dto.setTitle(offer.getTitle());
+            dto.setDescription(offer.getDescription());
+            dto.setDomain(offer.getDomain());
+            dto.setJob(offer.getJob());
+            dto.setNumberOfPlaces(offer.getNumberOfPlaces());
+            list.add(dto);
+        }
+        return list;
+    }
+
+    @Named("toMapHasLogoDto")
+    default HasLogoDto mapEnterpriseToHasLogoDto(Enterprise e) {
+        if (e == null) {
+            return null;
+        }
+        HasLogoDto hasLogoDto = new HasLogoDto();
+        hasLogoDto.setHasLogo(e.getLogo() != null);
+        return hasLogoDto;
+    }
 
     List<StudentResponseDto> toDtoStudentList(List<Student> studentList);
 

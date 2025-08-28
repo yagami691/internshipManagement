@@ -31,7 +31,7 @@ public class LoginController {
 
         Users user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-//
+
         if (!user.isEmailVerified()) {
             throw new RuntimeException("User is not verified");
         }

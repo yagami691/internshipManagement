@@ -16,7 +16,7 @@ public class OfferResponseDto {
     private String description;
     private String domain;
     private String job;
-    private String numberOfPlaces;
+    private Integer numberOfPlaces;
     private Long durationOfInternship;
     private LocalDate startDate;
     private LocalDate endDate;

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -16,4 +18,5 @@ public class EnterpriseResponseDto {
     private boolean inPartnership;
     private String matriculation;
     private HasLogoDto hasLogo;
+    private List<MiniOfferResponseDto> offers;
 }
