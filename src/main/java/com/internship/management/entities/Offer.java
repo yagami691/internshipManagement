@@ -25,7 +25,7 @@ public class Offer {
     private String typeOfInternship;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String numberOfPlaces;
+    private Integer numberOfPlaces;
     private String requirements;
     private boolean remote;
     private boolean paying;

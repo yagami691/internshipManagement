@@ -13,6 +13,9 @@ import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +66,24 @@ public class AdminController {
 
         List<Student> students = postOffer.getAllStudent();
         return ResponseEntity.ok(postOfferMapper.toDtoStudentList(students));
+    }
+
+    @GetMapping("/teacherPagination")
+    public Page<TeacherResponseDto> getTeacherPagination(Pageable pageable){
+
+        Page<Teacher> saveTeacher = postOffer.getAllTeacherByPagination(pageable);
+        List<TeacherResponseDto>  teachers =  postOfferMapper.toDtoTeacherList(saveTeacher.getContent());
+
+        return new PageImpl<>(teachers, pageable, teachers.size());
+    }
+
+    @GetMapping("/studentPagination")
+    public Page<StudentResponseDto> getStudentPagination(Pageable pageable){
+
+        Page<Student> saveStudent = postOffer.getAllStudentByPagination(pageable);
+        List<StudentResponseDto>  students =  postOfferMapper.toDtoStudentList(saveStudent.getContent());
+
+        return new PageImpl<>(students, pageable, students.size());
     }
 
     @PutMapping("/Enterprise/{id}/approve")

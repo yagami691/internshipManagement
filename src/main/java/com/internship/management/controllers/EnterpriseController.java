@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +33,7 @@ public class EnterpriseController {
     private final NotificationInterface notificationInterface;
 
     @PostMapping("/createOffer")
-    public ResponseEntity<OfferResponseDto> create (@ModelAttribute OfferRequestDto offerRequestDto) throws IOException {
+    public ResponseEntity<OfferResponseDto> create (@RequestBody OfferRequestDto offerRequestDto){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
@@ -40,18 +41,29 @@ public class EnterpriseController {
         Offer offer = postOfferMapper.toEntity(offerRequestDto);
         offer.setEnterprise(enterprise);
 
-        if (offerRequestDto.getPdfConvention() != null && !offerRequestDto.getPdfConvention().isEmpty()) {
+        postOffer.saveOffer(offer);
+        return ResponseEntity.ok(postOfferMapper.toDto(offer));
+    }
+
+    @PostMapping( "/{offerId}/convention")
+    public  ResponseEntity<OfferResponseDto> createPdfConvention (@PathVariable Long offerId, @RequestParam MultipartFile pdfConvention) throws IOException {
+
+        Offer offer = postOffer.getOfferById(offerId);
+
+        if (pdfConvention != null && !pdfConvention.isEmpty()) {
+
             Convention c = new Convention();
-            c.setPdfConvention(offerRequestDto.getPdfConvention().getBytes());
+            c.setPdfConvention(pdfConvention.getBytes());
             c.setOffer(offer);
+            postOffer.saveConvention(c);
             offer.setConvention(c);
         }
 
         postOffer.saveOffer(offer);
-        OfferResponseDto offerResponseDto = postOfferMapper.toDto(offer);
 
-        return ResponseEntity.ok(offerResponseDto);
+        return ResponseEntity.ok(postOfferMapper.toDto(offer));
     }
+
 
     @GetMapping("/Applications")
     public List<ApplicationResponseDto> getApplications() {
