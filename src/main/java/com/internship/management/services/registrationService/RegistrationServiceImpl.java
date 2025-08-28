@@ -22,7 +22,7 @@ public class RegistrationServiceImpl implements InternshipService {
 
 
     @Transactional
-   public void registerEnterprise(Enterprise enterprise) {
+   public Enterprise registerEnterprise(Enterprise enterprise) {
 
        boolean isEnterpriseEmailExists = userRepository.existsByEmail(enterprise.getEmail());
        if (isEnterpriseEmailExists) {
@@ -31,6 +31,8 @@ public class RegistrationServiceImpl implements InternshipService {
 
        Enterprise newEnterprise = enterpriseRepository.save(enterprise);
        verificationTokenService.createAndSendToken(newEnterprise);
+
+       return newEnterprise;
     }
 
     public void registerStudent(Student student) {

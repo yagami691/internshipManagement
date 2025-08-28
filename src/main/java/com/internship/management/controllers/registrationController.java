@@ -1,7 +1,9 @@
 package com.internship.management.controllers;
 
 
+import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.entities.*;
+import com.internship.management.mappers.PostOfferMapper;
 import com.internship.management.mappers.RegistrationMapper;
 import com.internship.management.dto.UserResponseDto;
 import com.internship.management.dto.registration.EnterpriseRegistrationRequestDto;
@@ -28,9 +30,10 @@ public class registrationController {
     private final RegistrationMapper registrationMapper;
     private final VerificationTokenService verificationTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final PostOfferMapper postOfferMapper;
 
     @PostMapping("/registerEnterprise")
-    public ResponseEntity<String> create(@Valid @ModelAttribute EnterpriseRegistrationRequestDto enterpriseRequestDto) throws IOException {
+    public ResponseEntity<EnterpriseResponseDto> create(@Valid @ModelAttribute EnterpriseRegistrationRequestDto enterpriseRequestDto) throws IOException {
 
         Enterprise toEnterpriseEntity = registrationMapper.toEntity(enterpriseRequestDto,passwordEncoder);
 
@@ -43,9 +46,9 @@ public class registrationController {
             toEnterpriseEntity.setLogo(logo);
         }
 
-        internshipService.registerEnterprise(toEnterpriseEntity);
+       Enterprise enterprise =  internshipService.registerEnterprise(toEnterpriseEntity);
 
-        return ResponseEntity.ok().body(enterpriseRequestDto.getName() + " Company" + " is registered successfully");
+        return ResponseEntity.ok().body(postOfferMapper.toDtoEnterprise(enterprise));
     }
 
     @PostMapping("/registerStudent")

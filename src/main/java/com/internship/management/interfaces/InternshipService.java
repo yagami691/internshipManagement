@@ -5,7 +5,7 @@ import com.internship.management.entities.*;
 
 public interface InternshipService {
 
-    void registerEnterprise(Enterprise enterprise);
+    Enterprise registerEnterprise(Enterprise enterprise);
 
     void registerStudent(Student student);
 
