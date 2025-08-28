@@ -7,6 +7,7 @@ import com.internship.management.entities.Users;
 import com.internship.management.interfaces.PostOffer;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +50,7 @@ public class UpdateProfileUser {
         return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-    @DeleteMapping("/deleteTeacherAccount")
+    @DeleteMapping("/deleteUserAccount")
     public ResponseEntity<String> delete(){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -57,5 +58,15 @@ public class UpdateProfileUser {
         postOffer.deleteUser(user.getId());
 
         return ResponseEntity.ok( user.getName() + " deleted successfully");
+    }
+
+    @PutMapping("/verifyPassword")
+    public ResponseEntity<String> verifyPassword(@RequestBody PasswordRequestDto passwordRequestDto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        return passwordEncoder.matches(passwordRequestDto.getPassword(), user.getPassword())
+                ? ResponseEntity.ok("Password is correct")
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Password is incorrect");
     }
 }

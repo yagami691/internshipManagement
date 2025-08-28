@@ -69,21 +69,14 @@ public class AdminController {
     public ResponseEntity<EnterpriseResponseDto> approveEnterprise(@PathVariable Long id, @RequestParam boolean approved){
 
         Enterprise enterprise = postOffer.getByEnterpriseId(id);
-        enterprise.setInPartnership(approved);
-        postOffer.saveUser(enterprise);
+
+        if(approved){
+            enterprise.setInPartnership(true);
+            postOffer.saveUser(enterprise);
+        }else{
+            postOffer.deleteUser(id);
+        }
 
         return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
-    }
-
-
-    @DeleteMapping("/deleteAdminAccount")
-    public ResponseEntity<String> delete(){
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
-
-        postOffer.deleteUser(user.getId());
-
-        return ResponseEntity.ok("admin deleted successfully");
     }
 }

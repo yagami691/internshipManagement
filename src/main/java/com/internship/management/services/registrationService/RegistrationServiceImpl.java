@@ -22,7 +22,7 @@ public class RegistrationServiceImpl implements InternshipService {
 
 
     @Transactional
-   public Enterprise registerEnterprise(Enterprise enterprise) {
+   public void registerEnterprise(Enterprise enterprise) {
 
        boolean isEnterpriseEmailExists = userRepository.existsByEmail(enterprise.getEmail());
        if (isEnterpriseEmailExists) {
@@ -31,11 +31,9 @@ public class RegistrationServiceImpl implements InternshipService {
 
        Enterprise newEnterprise = enterpriseRepository.save(enterprise);
        verificationTokenService.createAndSendToken(newEnterprise);
+    }
 
-       return newEnterprise;
-   }
-
-    public Student registerStudent(Student student) {
+    public void registerStudent(Student student) {
 
         boolean isStudentEmailExists = userRepository.existsByEmail(student.getEmail());
         if (isStudentEmailExists) {
@@ -45,10 +43,10 @@ public class RegistrationServiceImpl implements InternshipService {
         Student newStudent = studentRepository.save(student);
         verificationTokenService.createAndSendToken(newStudent);
 
-       return studentRepository.save(student);
+        studentRepository.save(student);
     }
 
-    public Teacher registerTeacher(Teacher teacher) {
+    public void registerTeacher(Teacher teacher) {
 
         boolean isTeacherEmailExists = userRepository.existsByEmail(teacher.getEmail());
         if (isTeacherEmailExists) {
@@ -58,7 +56,7 @@ public class RegistrationServiceImpl implements InternshipService {
         Teacher newTeacher = teacherRepository.save(teacher);
         verificationTokenService.createAndSendToken(newTeacher);
 
-       return teacherRepository.save(teacher);
+        teacherRepository.save(teacher);
     }
 
     public Users getUserByEmail(String email) {

@@ -54,18 +54,18 @@ public class registrationController {
     public ResponseEntity<String> create(@Valid @RequestBody StudentRegistrationRequestDto studentRequestDto) {
 
         Student toStudentEntity = registrationMapper.toEntity(studentRequestDto, passwordEncoder);
-        Student registeredStudent = internshipService.registerStudent(toStudentEntity);
+        internshipService.registerStudent(toStudentEntity);
 
-        return ResponseEntity.ok().body(registeredStudent.getName() + " student" + " is registered successfully");
+        return ResponseEntity.ok().body(studentRequestDto.getName() + " student" + " is registered successfully");
     }
 
     @PostMapping("/registerTeacher")
     public ResponseEntity<String> create(@Valid @RequestBody TeacherRegistrationRequestDto teacherRequestDto) {
 
         Teacher toTeacherEntity = registrationMapper.toEntity(teacherRequestDto, passwordEncoder);
-        Teacher registeredTeacher = internshipService.registerTeacher(toTeacherEntity);
+        internshipService.registerTeacher(toTeacherEntity);
 
-        return ResponseEntity.ok().body(registeredTeacher.getName() + " teacher" + " is registered successfully");
+        return ResponseEntity.ok().body(teacherRequestDto.getName() + " teacher" + " is registered successfully");
     }
 
 
