@@ -167,4 +167,8 @@ public class OfferServiceImpl implements PostOffer {
     public Application getApplicationByStudentOnInternshipTrue(Student student){
         return applicationRepository.findApplicationByStudentAndStudent_OnInternshipTrue(student);
     }
+
+    public List<Teacher> getTeachersByDepartment(String department){
+        return teacherRepository.findByDepartment(department);
+    }
 }

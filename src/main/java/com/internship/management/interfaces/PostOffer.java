@@ -75,4 +75,6 @@ public interface PostOffer {
     Application getApplicationApprovedById(Long id);
 
     Application getApplicationByStudentOnInternshipTrue(Student student);
+
+    List<Teacher> getTeachersByDepartment(String department);
 }

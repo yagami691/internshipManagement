@@ -60,6 +60,12 @@ public class EnterpriseController {
 
         postOffer.saveOffer(offer);
 
+        List<Teacher> teachers = postOffer.getTeachersByDepartment(offer.getDomain());
+
+        for (Teacher teacher : teachers ) {
+            notificationInterface.sendNotification(teacher, "New offers arrival");
+        }
+
         return ResponseEntity.ok(postOfferMapper.toDto(offer));
     }
 
