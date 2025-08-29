@@ -59,6 +59,10 @@ public class OfferServiceImpl implements PostOffer {
         return enterpriseRepository.findByInPartnershipFalse();
     }
 
+    public List<Enterprise> getEnterpriseByPartnershipTrue(){
+        return enterpriseRepository.findByInPartnershipTrue();
+    }
+
     public List<Offer> getOffersByStatusAndConventionApproved(OfferStatus offerStatus, ConventionState conventionState, String domain){
         return offerRepository.findOffersByStatusAndConventionStateAndDomain(offerStatus, conventionState, domain);
     }
@@ -83,10 +87,6 @@ public class OfferServiceImpl implements PostOffer {
     public Application getApplicationById(Long id){
         return applicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Application Not Found"));
-    }
-
-    public List<Application> getByApprovedOrRejectedApplication(Long id){
-        return applicationRepository.findApprovedOrRejectedApplicationsByStudentId(id);
     }
 
     public void deleteUser(Long id){
@@ -146,5 +146,25 @@ public class OfferServiceImpl implements PostOffer {
 
     public void saveConvention (Convention convention){
         conventionRepository.save(convention);
+    }
+
+    public List<Offer> getOffersByStatusApprovedAndTeacherEmail(OfferStatus offerStatus, String email){
+        return offerRepository.findOffersByStatusAndValidatedBy_Email(offerStatus, email);
+    }
+
+    public List<Application> getApplicationsApprovedByStudentEmail(String email){
+        return applicationRepository.findApprovedApplicationsByStudentEmail(email);
+    }
+
+    public List<Application> getApplicationsRejectedOrPendingByStudentEmail(String email){
+        return applicationRepository.findRejectedOrPendingApplicationsByStudentEmail(email);
+    }
+
+    public Application getApplicationApprovedById(Long id){
+        return applicationRepository.findApprovedApplicationById(id);
+    }
+
+    public Application getApplicationByStudentOnInternshipTrue(Student student){
+        return applicationRepository.findApplicationByStudentAndStudent_OnInternshipTrue(student);
     }
 }

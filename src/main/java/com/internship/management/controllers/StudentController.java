@@ -2,7 +2,6 @@ package com.internship.management.controllers;
 
 import com.internship.management.dto.application.ApplicationRequestDto;
 import com.internship.management.dto.application.ApplicationResponseDto;
-import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.dto.profile.*;
 import com.internship.management.entities.*;
@@ -16,11 +15,11 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/student")
@@ -36,15 +35,50 @@ public class StudentController {
     @GetMapping("/offersByApprovedStatus")
     public List<OfferResponseDto> getOfferByStatus(){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Student student = postOffer.getStudentByEmail(email);
+
         List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getDepartment());
         log.info("value {} ", student.isOnInternship());
         log.info("value {} ", student.getName());
 
         return student.isOnInternship() ? List.of() : postOfferMapper.toDtoList(offers);
+    }
+
+    @GetMapping("pendingApplicationsOfStudent")
+    public List<ApplicationResponseDto> getPendingApplicationsOfStudent(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = postOffer.getStudentByEmail(email);
+
+        List<Application> applications = postOffer.getApplicationsRejectedOrPendingByStudentEmail(email);
+
+        return student.isOnInternship() ? List.of() :  postOfferMapper.toDtoApplicationList(applications);
+    }
+
+    @GetMapping("/applicationsApprovedOfStudent")
+    public List<ApplicationResponseDto> getApplicationsApprovedOfStudent(){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = postOffer.getStudentByEmail(email);
+
+        List<Application> applications  = postOffer.getApplicationsApprovedByStudentEmail(email);
+
+        Application chosenApplicationByStudent = postOffer.getApplicationByStudentOnInternshipTrue(student);
+
+        if(student.isOnInternship()){
+
+            for(Application application : applications){
+
+                if(!Objects.equals(application.getId(), chosenApplicationByStudent.getId())){
+                    application.setState(ApplicationState.CANCELLED);
+                }
+            }
+
+            return List.of();
+        }
+
+        return postOfferMapper.toDtoApplicationList(applications);
     }
 
     @GetMapping("/filter")
@@ -58,27 +92,10 @@ public class StudentController {
         return List.of();
     }
 
-    @GetMapping("/StudentNotifications")
-    public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Student student = postOffer.getStudentByEmail(email);
-
-        List<Notification> unseen = notificationInterface.getAllUnSeenNotificationsByUser(student);
-
-        return ResponseEntity.ok(
-                unseen.stream()
-                        .map(n -> new NotificationDto(n.getId(), n.getMessage(), n.getCreatedAt()))
-                        .toList()
-        );
-    }
-
-
     @PostMapping("{offer_id}/createApplication")
     public ApplicationResponseDto create(@ModelAttribute ApplicationRequestDto applicationRequestDto, @PathVariable Long offer_id){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Application application = postOfferMapper.toEntity(applicationRequestDto);
         Student student = postOffer.getStudentByEmail(email);
@@ -97,25 +114,20 @@ public class StudentController {
         return postOfferMapper.toDto(application);
     }
 
-    @PutMapping("updateStudentStatus")
-    public ResponseEntity<String> updateStudentStatus(){
+    @PutMapping("{application_id}/updateStudentStatus")
+    public ResponseEntity<ApplicationResponseDto> updateStudentStatus(@PathVariable Long application_id, @RequestParam boolean applicationAccepted){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Student student = postOffer.getStudentByEmail(email);
 
-        List<Application> applications = postOffer.getByApprovedOrRejectedApplication(student.getId());
-        for(Application application : applications){
-            if(application.getState() ==  ApplicationState.APPROVED){
-                student.setOnInternship(true);
-                postOffer.saveUser(student);
-                return ResponseEntity.ok(student.getName() + " is on internship");
-            };
+        Application application = postOffer.getApplicationApprovedById(application_id);
+
+        if(applicationAccepted) {
+            student.setOnInternship(true);
         }
 
-        return ResponseEntity.ok(student.getName() +
-                " can still apply because all of his applications was rejected");
+        return ResponseEntity.ok(postOfferMapper.toDto(application));
     }
-
 
     @PatchMapping("updateLanguages")
     public ResponseEntity<String> updateLanguages(@RequestBody LanguageRequestDto languageRequestDto) {

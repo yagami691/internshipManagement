@@ -16,6 +16,8 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise,Long> {
 
     List<Enterprise> findByInPartnershipFalse();
 
+    List<Enterprise> findByInPartnershipTrue();
+
 
 }
 

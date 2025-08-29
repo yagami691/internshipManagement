@@ -33,7 +33,7 @@ public class registrationController {
     private final PostOfferMapper postOfferMapper;
 
     @PostMapping("/registerEnterprise")
-    public ResponseEntity<EnterpriseResponseDto> create(@Valid @ModelAttribute EnterpriseRegistrationRequestDto enterpriseRequestDto) throws IOException {
+    public ResponseEntity<String> create(@Valid @ModelAttribute EnterpriseRegistrationRequestDto enterpriseRequestDto) throws IOException {
 
         Enterprise toEnterpriseEntity = registrationMapper.toEntity(enterpriseRequestDto,passwordEncoder);
 
@@ -46,9 +46,9 @@ public class registrationController {
             toEnterpriseEntity.setLogo(logo);
         }
 
-       Enterprise enterprise =  internshipService.registerEnterprise(toEnterpriseEntity);
+       internshipService.registerEnterprise(toEnterpriseEntity);
 
-        return ResponseEntity.ok().body(postOfferMapper.toDtoEnterprise(enterprise));
+        return ResponseEntity.ok().body(enterpriseRequestDto.getName() + " Company" + " is registered successfully");
     }
 
     @PostMapping("/registerStudent")

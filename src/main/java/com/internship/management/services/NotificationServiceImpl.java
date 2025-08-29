@@ -47,7 +47,6 @@ public class NotificationServiceImpl implements NotificationInterface {
                log.info("Sending notification to department {} with message: {}", department, message);
           }
 
-
           if(user instanceof Student){
 
                String department =  ((Student) user).getDepartment();
@@ -60,11 +59,19 @@ public class NotificationServiceImpl implements NotificationInterface {
                log.info("Sending notification to Student {} department with message: {}", department, message);
           }
 
-
      }
 
      public List<Notification> getAllUnSeenNotificationsByUser(Users user) {
           return notificationRepository.findByRecipientAndSeenFalse(user);
+     }
+
+     public void markAsSeen(Long id, Users user) {
+
+          Notification notif = notificationRepository.findByIdAndRecipientId(id, user.getId())
+                  .orElseThrow(() -> new RuntimeException("Notification not found or not owned by this user"));
+
+          notif.setSeen(true);
+          notificationRepository.save(notif);
      }
 
 }

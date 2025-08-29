@@ -1,6 +1,7 @@
 package com.internship.management.repositories;
 
 import com.internship.management.entities.Offer;
+import com.internship.management.entities.Teacher;
 import com.internship.management.enums.ConventionState;
 import com.internship.management.enums.OfferStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,4 +31,5 @@ public interface OfferRepository extends JpaRepository<Offer,Long> {
 
      List<Offer> findByPayingAndRemote(boolean paying, boolean remote);
 
+     List<Offer> findOffersByStatusAndValidatedBy_Email(OfferStatus status, String email);
 }

@@ -5,14 +5,11 @@ import com.internship.management.entities.*;
 
 public interface InternshipService {
 
-    Enterprise registerEnterprise(Enterprise enterprise);
+    void registerEnterprise(Enterprise enterprise);
 
     void registerStudent(Student student);
 
     void registerTeacher(Teacher teacher);
 
     Users getUserByEmail(String email);
-
-    void saveLogo(Logo logo);
-
 }

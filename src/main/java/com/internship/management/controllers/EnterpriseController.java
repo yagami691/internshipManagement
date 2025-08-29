@@ -2,7 +2,6 @@ package com.internship.management.controllers;
 
 
 import com.internship.management.dto.application.ApplicationResponseDto;
-import com.internship.management.dto.application.NotificationDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
@@ -75,21 +74,6 @@ public class EnterpriseController {
         return postOfferMapper.toDtoApplicationList(applications);
     }
 
-    @GetMapping("/enterpriseNotifications")
-    public ResponseEntity<List<NotificationDto>> getUnseenNotifications() {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
-
-        List<Notification> unseen = notificationInterface.getAllUnSeenNotificationsByUser(enterprise);
-
-        return ResponseEntity.ok(
-                unseen.stream()
-                        .map(n -> new NotificationDto(n.getId(), n.getMessage(), n.getCreatedAt()))
-                        .toList()
-        );
-    }
-
     @GetMapping("/listOfOffers")
     public List<OfferResponseDto> getOffers() {
 
@@ -120,6 +104,7 @@ public class EnterpriseController {
                     enterprise.getName() + " company";
             notificationInterface.sendNotification(student, msg);
             log.info("Application has been {} ",  application.getState());
+
         }else{
 
             application.setState(ApplicationState.REJECTED);

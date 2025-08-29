@@ -40,8 +40,6 @@ public interface PostOffer {
 
     List<Student> getStudentsByDepartment(String department);
 
-    List<Application> getByApprovedOrRejectedApplication(Long id);
-
     List<Offer> getOfferPaying(boolean paying);
 
     List<Offer> getOfferRemote(boolean remote);
@@ -65,4 +63,16 @@ public interface PostOffer {
     Page<Teacher> getAllTeacherByPagination(Pageable pageable);
 
     Page<Student> getAllStudentByPagination(Pageable pageable);
+
+    List<Enterprise> getEnterpriseByPartnershipTrue();
+
+    List<Offer> getOffersByStatusApprovedAndTeacherEmail(OfferStatus offerStatus, String email);
+
+    List<Application> getApplicationsRejectedOrPendingByStudentEmail(String email);
+
+    List<Application> getApplicationsApprovedByStudentEmail(String email);
+
+    Application getApplicationApprovedById(Long id);
+
+    Application getApplicationByStudentOnInternshipTrue(Student student);
 }

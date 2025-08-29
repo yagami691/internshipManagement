@@ -22,7 +22,7 @@ public class RegistrationServiceImpl implements InternshipService {
 
 
     @Transactional
-   public Enterprise registerEnterprise(Enterprise enterprise) {
+   public void registerEnterprise(Enterprise enterprise) {
 
        boolean isEnterpriseEmailExists = userRepository.existsByEmail(enterprise.getEmail());
        if (isEnterpriseEmailExists) {
@@ -31,8 +31,6 @@ public class RegistrationServiceImpl implements InternshipService {
 
        Enterprise newEnterprise = enterpriseRepository.save(enterprise);
        verificationTokenService.createAndSendToken(newEnterprise);
-
-       return newEnterprise;
     }
 
     public void registerStudent(Student student) {
@@ -44,8 +42,6 @@ public class RegistrationServiceImpl implements InternshipService {
 
         Student newStudent = studentRepository.save(student);
         verificationTokenService.createAndSendToken(newStudent);
-
-        studentRepository.save(student);
     }
 
     public void registerTeacher(Teacher teacher) {
@@ -58,7 +54,6 @@ public class RegistrationServiceImpl implements InternshipService {
         Teacher newTeacher = teacherRepository.save(teacher);
         verificationTokenService.createAndSendToken(newTeacher);
 
-        teacherRepository.save(teacher);
     }
 
     public Users getUserByEmail(String email) {
@@ -66,7 +61,4 @@ public class RegistrationServiceImpl implements InternshipService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public void saveLogo(Logo logo){
-        logoRepository.save(logo);
-    }
 }

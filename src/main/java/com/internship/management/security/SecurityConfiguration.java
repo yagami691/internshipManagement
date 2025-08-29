@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/profilePhoto/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
                         .requestMatchers("/downloadFiles/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
                         .requestMatchers("/updateProfile/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
+                        .requestMatchers("/getNotifications/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
 
                         .requestMatchers("/api/student/**").hasRole("STUDENT")
                         .requestMatchers("/api/enterprise/**").hasRole("ENTERPRISE")

@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
      List<Notification> findByRecipientAndSeenFalse(Users recipient);
+
+    Optional<Notification>  findByIdAndRecipientId(Long id, Long userId);
 }
