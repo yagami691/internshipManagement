@@ -42,9 +42,6 @@ public class TeacherController {
         Teacher teacher = postOffer.getTeacherByEmail(email);
         List<Offer> offers = postOffer.getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(teacher.getDepartment(), OfferStatus.PENDING);
 
-        String teacherMsg = "new offers to approve";
-        notificationInterface.sendNotification(teacher, teacherMsg);
-
         return ResponseEntity.ok(postOfferMapper.toDtoList(offers));
     }
 
