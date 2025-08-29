@@ -39,7 +39,7 @@ public class NotificationController {
         );
     }
 
-    @PutMapping("/enterpriseNotifications/{id}/seen")
+    @PutMapping("/userNotifications/{id}/seen")
     public ResponseEntity<String> markAsSeen(@PathVariable Long id) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
