@@ -171,4 +171,8 @@ public class OfferServiceImpl implements PostOffer {
     public List<Teacher> getTeachersByDepartment(String department){
         return teacherRepository.findByDepartment(department);
     }
+
+    public void deleteApplicationRejected(Long id){
+        applicationRepository.deleteById(id);
+    }
 }

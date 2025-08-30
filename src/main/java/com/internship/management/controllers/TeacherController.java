@@ -3,6 +3,7 @@ package com.internship.management.controllers;
 
 import com.internship.management.dto.InternshipStatDto;
 import com.internship.management.dto.StudentResponseDto;
+import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.dto.postOffer.OfferValidationRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
@@ -134,5 +135,12 @@ public class TeacherController {
 
         List<Student> students = postOffer.getStudentsByDepartment(teacher.getDepartment());
         return postOfferMapper.toDtoStudentList(students);
+    }
+
+    @GetMapping("/enterpriseInPartnership")
+    public List<EnterpriseResponseDto> getEnterpriseInPartnership(){
+
+        List<Enterprise> listOfEnterpriseInPartnership = postOffer.getEnterpriseByPartnershipTrue();
+        return postOfferMapper.toDtoEnterpriseList(listOfEnterpriseInPartnership);
     }
 }

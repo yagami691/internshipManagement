@@ -77,4 +77,6 @@ public interface PostOffer {
     Application getApplicationByStudentOnInternshipTrue(Student student);
 
     List<Teacher> getTeachersByDepartment(String department);
+
+    void deleteApplicationRejected(Long id);
 }

@@ -81,6 +81,11 @@ public class StudentController {
         return postOfferMapper.toDtoApplicationList(applications);
     }
 
+    @DeleteMapping("/{application_id}")
+    public void deleteApplication(@PathVariable("application_id") Long application_id){
+        postOffer.deleteApplicationRejected(application_id);
+    }
+
     @GetMapping("/filter")
     public List<OfferResponseDto> filter(@RequestParam Boolean paying,
                                          @RequestParam Boolean remote) {
