@@ -134,7 +134,5 @@ public class TeacherController {
 
         List<Student> students = postOffer.getStudentsByDepartment(teacher.getDepartment());
         return postOfferMapper.toDtoStudentList(students);
-
     }
-
 }
