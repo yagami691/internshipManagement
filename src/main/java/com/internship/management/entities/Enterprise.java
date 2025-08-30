@@ -1,6 +1,7 @@
 package com.internship.management.entities;
 
 
+import com.internship.management.enums.EnterpriseState;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,9 @@ public class Enterprise extends Users {
     private String city;
     private String country;
     private boolean inPartnership;
+
+    @Enumerated(EnumType.STRING)
+    private EnterpriseState enterpriseState = EnterpriseState.PENDING;
 
     @OneToOne(mappedBy = "enterprise", cascade = CascadeType.ALL, orphanRemoval = true)
     private Logo logo;

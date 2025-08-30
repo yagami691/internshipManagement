@@ -7,6 +7,7 @@ import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.entities.Enterprise;
 import com.internship.management.entities.Student;
 import com.internship.management.entities.Teacher;
+import com.internship.management.enums.EnterpriseState;
 import com.internship.management.interfaces.ChartInterface;
 import com.internship.management.interfaces.NotificationInterface;
 import com.internship.management.interfaces.PostOffer;
@@ -102,10 +103,15 @@ public class AdminController {
                 "Your enterprise was rejected on our internship management platform";
 
         if(approved){
+
+            enterprise.setEnterpriseState(EnterpriseState.APPROVED);
             enterprise.setInPartnership(true);
             postOffer.saveUser(enterprise);
             notificationInterface.sendNotification(enterprise, enterpriseMsg);
+
         }else{
+
+            enterprise.setEnterpriseState(EnterpriseState.REJECTED);
             notificationInterface.sendNotification(enterprise, enterpriseMsg);
         }
 
