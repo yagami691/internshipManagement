@@ -129,6 +129,7 @@ public class StudentController {
 
         if(applicationAccepted) {
             student.setOnInternship(true);
+            postOffer.saveUser(student);
         }
 
         return ResponseEntity.ok(postOfferMapper.toDto(application));
