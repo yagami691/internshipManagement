@@ -41,14 +41,7 @@ public class Users {
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
     private List<Notification> messages = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
-//    private List<Message> receivedMessage = new ArrayList<>();
-
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private VerificationToken verificationToken;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ProfilePhoto profilePhoto;
 
 }
