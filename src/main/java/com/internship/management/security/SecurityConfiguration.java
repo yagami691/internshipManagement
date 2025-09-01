@@ -44,8 +44,7 @@ public class SecurityConfiguration {
                                 "/ws/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        .requestMatchers("/profilePhoto/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
+                        
                         .requestMatchers("/downloadFiles/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
                         .requestMatchers("/updateProfile/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
                         .requestMatchers("/getNotifications/**").hasAnyRole("TEACHER", "STUDENT", "ADMIN","ENTERPRISE")
