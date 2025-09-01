@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(path = "profilePhoto")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "JWT")
-@PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'ADMIN')")
 public class ProfilePhotoController {
 
     private final ProfilePhotoService profilePhotoService;

@@ -12,6 +12,9 @@ import com.internship.management.mappers.PostOfferMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -120,5 +123,20 @@ public class EnterpriseController {
         }
 
         return  ResponseEntity.ok().body(msg);
+    }
+
+    @GetMapping("/getEnterpriseLogo")
+    public ResponseEntity<byte[]> getEnterpriseLogo() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+
+        Logo logo = postOffer.getLogoByEnterprise(enterprise);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(logo.getContentType()));
+
+        return new ResponseEntity<>(logo.getLogo(), headers, HttpStatus.OK);
     }
 }
