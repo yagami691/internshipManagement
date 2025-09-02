@@ -93,11 +93,11 @@ public class TeacherController {
 
         Enterprise enterprise = offer.getEnterprise();
 
-        String enterpriseMsg =  "Your offer " + offer.getTitle() + " has been reviewed by the " + offer.getValidatedBy().getName() + " teacher.";
+        String enterpriseMsg =  "Ton offre" + offer.getTitle() + " a été approuvée par l'enseignant " + offer.getValidatedBy().getName();
         notificationInterface.sendNotification(enterprise, enterpriseMsg);
 
         if(offer.getStatus() == OfferStatus.APPROVED && offer.getConvention().getConventionState() == ConventionState.APPROVED){
-            String studentMsg = "New offer approved by teacher: " + offer.getValidatedBy().getName();
+            String studentMsg = "Nouvelle offre approuvée par: " + offer.getValidatedBy().getName();
 
             List<Student> studentsInDepartment = postOffer.getStudentsByDepartment(teacher.getDepartment());
 
@@ -106,7 +106,7 @@ public class TeacherController {
             }
 
         }else{
-            enterpriseMsg =  "Your offer \"" + offer.getTitle() + "\" has been rejected by the " + offer.getValidatedBy().getName() + " teacher.";
+            enterpriseMsg =  "Ton offre \"" + offer.getTitle() + "\" a été rejeté par l'enseignant " + offer.getValidatedBy().getName();
             notificationInterface.sendNotification(enterprise, enterpriseMsg);
         }
 

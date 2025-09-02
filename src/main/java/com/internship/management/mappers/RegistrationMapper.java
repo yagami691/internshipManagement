@@ -39,12 +39,6 @@ public interface RegistrationMapper {
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(teacherRequestDto.getPassword()))")
     Teacher toEntity(TeacherRegistrationRequestDto teacherRequestDto, @Context PasswordEncoder passwordEncoder);
 
-
-/*
-    List<UserResponseDto> toDtoList(List<Users> users);
-    Offer updateOffer(OfferRequestDto offer);
-*/
-
     int EXPIRATION_MINUTES = 10;
 
     @Mapping(target = "code", source = "code")
@@ -56,6 +50,5 @@ public interface RegistrationMapper {
     @Mapping(target = "code", source = "newCode")
     @Mapping(target = "expirationDate", expression = "java(LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES))")
     VerificationToken updateToken(@MappingTarget VerificationToken token, String newCode);
-
 
 }

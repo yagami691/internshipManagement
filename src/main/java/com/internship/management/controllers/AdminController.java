@@ -99,8 +99,8 @@ public class AdminController {
     public ResponseEntity<EnterpriseResponseDto> approveEnterprise(@PathVariable Long id, @RequestParam boolean approved){
 
         Enterprise enterprise = postOffer.getByEnterpriseId(id);
-        String enterpriseMsg = approved? "Your enterprise was  approved on our internship management platform":
-                "Your enterprise was rejected on our internship management platform";
+        String enterpriseMsg = approved? "Ton enterprise a été approuvée sur notre plateforme de gestion de stage":
+                "Ton enterprise a été rejetée sur notre plateforme de gestion de stage";
 
         if(approved){
 

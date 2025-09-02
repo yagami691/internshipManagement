@@ -52,6 +52,8 @@ public interface PostOfferMapper {
         dto.setEmail(e.getEmail());
         dto.setName(e.getName());
         dto.setMatriculation(e.getMatriculation());
+        dto.setCountry(e.getCountry());
+        dto.setCity(e.getCity());
         dto.setHasLogo(hasLogoDto);
         dto.setInPartnership(e.isInPartnership());
         dto.setSectorOfActivity(e.getSectorOfActivity());
@@ -118,6 +120,8 @@ public interface PostOfferMapper {
 
     @Mapping(target = "offers", source = "enterprise", qualifiedByName = "toMiniOfferResponseDtoList")
     @Mapping(target ="hasLogo", source = "enterprise", qualifiedByName = "toMapHasLogoDto")
+    @Mapping(source = "country", target = "country")
+    @Mapping(source = "city", target = "city")
     EnterpriseResponseDto toDtoEnterprise(Enterprise enterprise);
 
     @Named("toMiniOfferResponseDtoList")
@@ -149,6 +153,7 @@ public interface PostOfferMapper {
         hasLogoDto.setHasLogo(e.getLogo() != null);
         return hasLogoDto;
     }
+    StudentResponseDto toDtoStudent(Student student);
 
     List<StudentResponseDto> toDtoStudentList(List<Student> studentList);
 

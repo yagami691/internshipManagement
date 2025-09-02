@@ -2,6 +2,7 @@ package com.internship.management.controllers;
 
 
 import com.internship.management.dto.application.ApplicationResponseDto;
+import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
 import com.internship.management.entities.*;
@@ -66,7 +67,7 @@ public class EnterpriseController {
         List<Teacher> teachers = postOffer.getTeachersByDepartment(offer.getDomain());
 
         for (Teacher teacher : teachers ) {
-            notificationInterface.sendNotification(teacher, "New offers arrival");
+            notificationInterface.sendNotification(teacher, "Nouvelle arrivage d'offres");
         }
 
         return ResponseEntity.ok(postOfferMapper.toDto(offer));
@@ -109,20 +110,27 @@ public class EnterpriseController {
         if(approved){
 
             application.setState(ApplicationState.APPROVED);
-            msg = "Your application has been " + application.getState() + " and reviewed by the " +
-                    enterprise.getName() + " company";
+            msg = "Ta candidature a été " + application.getState() + " et examiner par l'entreprise " +
+                    enterprise.getName();
             notificationInterface.sendNotification(student, msg);
             log.info("Application has been {} ",  application.getState());
 
         }else{
 
             application.setState(ApplicationState.REJECTED);
-            msg = "Your application has been " + application.getState() + " and reviewed by the " +
-                    enterprise.getName() + " company";
+            msg = "Ta candidature a été " + application.getState() + " et examiner par l'entreprise " +
+                    enterprise.getName();
             notificationInterface.sendNotification(student, msg);
         }
 
         return  ResponseEntity.ok().body(msg);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<EnterpriseResponseDto> getCurrentEnterpriseInfo() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+        return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
     }
 
     @GetMapping("/getEnterpriseLogo")

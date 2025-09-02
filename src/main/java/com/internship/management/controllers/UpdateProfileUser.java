@@ -50,6 +50,13 @@ public class UpdateProfileUser {
         return ResponseEntity.ok(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+    @GetMapping("/getCurrentUser")
+    public ResponseEntity<Users> getCurrentUser(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+        return ResponseEntity.ok(user);
+    }
+
     @DeleteMapping("/deleteUserAccount")
     public ResponseEntity<String> delete(){
 
