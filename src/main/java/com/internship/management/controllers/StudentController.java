@@ -128,8 +128,11 @@ public class StudentController {
         Application application = postOffer.getApplicationApprovedById(application_id);
 
         if(applicationAccepted) {
+
             student.setOnInternship(true);
+            application.setStudent(student);
             postOffer.saveUser(student);
+            postOffer.saveApplication(application);
         }
 
         return ResponseEntity.ok(postOfferMapper.toDto(application));
