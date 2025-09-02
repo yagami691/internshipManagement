@@ -106,18 +106,6 @@ public class OfferServiceImpl implements PostOffer {
         userRepository.save(user);
     }
 
-    public List<Offer> getOfferPaying(boolean paying){
-        return offerRepository.findByPaying(paying);
-    }
-
-    public List<Offer> getOfferRemote(boolean remote){
-        return offerRepository.findByRemote(remote);
-    }
-
-    public List<Offer> getOfferByPayingAndRemote(boolean paying, boolean remote){
-        return offerRepository.findByPayingAndRemote(paying, remote);
-    }
-
     public Logo getLogoByEnterprise(Enterprise enterprise){
         return logoRepository.findByEnterprise(enterprise)
                 .orElseThrow(() -> new RuntimeException("Logo not found"));

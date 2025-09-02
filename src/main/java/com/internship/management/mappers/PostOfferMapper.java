@@ -120,8 +120,6 @@ public interface PostOfferMapper {
 
     @Mapping(target = "offers", source = "enterprise", qualifiedByName = "toMiniOfferResponseDtoList")
     @Mapping(target ="hasLogo", source = "enterprise", qualifiedByName = "toMapHasLogoDto")
-    @Mapping(source = "country", target = "country")
-    @Mapping(source = "city", target = "city")
     EnterpriseResponseDto toDtoEnterprise(Enterprise enterprise);
 
     @Named("toMiniOfferResponseDtoList")

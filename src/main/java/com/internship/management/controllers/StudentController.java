@@ -55,11 +55,7 @@ public class StudentController {
 
         List<Application> applications = postOffer.getApplicationsRejectedOrPendingByStudentEmail(email);
 
-        List<Application> pendingOnly = applications.stream()
-            .filter(app -> app.getState() == ApplicationState.PENDING)
-            .toList();
-
-        return student.isOnInternship() ? List.of() :  postOfferMapper.toDtoApplicationList(pendingOnly);
+        return student.isOnInternship() ? List.of() :  postOfferMapper.toDtoApplicationList(applications);
     }
 
     @GetMapping("/applicationsApprovedOfStudent")
@@ -70,15 +66,11 @@ public class StudentController {
 
         List<Application> applications  = postOffer.getApplicationsApprovedByStudentEmail(email);
 
-        List<Application> approvedOnly = applications.stream()
-            .filter(app -> app.getState() == ApplicationState.APPROVED)
-            .toList();
-
         Application chosenApplicationByStudent = postOffer.getApplicationByStudentOnInternshipTrue(student);
 
         if(student.isOnInternship()){
 
-            for(Application application : approvedOnly){
+            for(Application application : applications){
 
                 if(!Objects.equals(application.getId(), chosenApplicationByStudent.getId())){
                     application.setState(ApplicationState.CANCELLED);
@@ -88,23 +80,12 @@ public class StudentController {
             return List.of();
         }
 
-        return postOfferMapper.toDtoApplicationList(approvedOnly);
+        return postOfferMapper.toDtoApplicationList(applications);
     }
 
     @DeleteMapping("/{application_id}")
     public void deleteApplication(@PathVariable("application_id") Long application_id){
         postOffer.deleteApplicationRejected(application_id);
-    }
-
-    @GetMapping("/filter")
-    public List<OfferResponseDto> filter(@RequestParam Boolean paying,
-                                         @RequestParam Boolean remote) {
-
-        if(paying != null && remote != null) return postOfferMapper.toDtoList(postOffer.getOfferByPayingAndRemote(paying, remote));
-        if(paying != null) return postOfferMapper.toDtoList(postOffer.getOfferPaying(paying));
-        if(remote != null)  postOfferMapper.toDtoList(postOffer.getOfferRemote(remote));
-
-        return List.of();
     }
 
     @PostMapping("{offer_id}/createApplication")
@@ -114,9 +95,8 @@ public class StudentController {
         Student student = postOffer.getStudentByEmail(email);
 
         if (student.isOnInternship()) {
-            return ResponseEntity.badRequest().body("you are on internship and cannot apply.");
+            return ResponseEntity.badRequest().body("you are on internship and cannot apply anymore.");
         }
-        
 
         List<Application> allApplications = student.getApplications();
         boolean alreadyApplied = allApplications.stream()
@@ -137,7 +117,7 @@ public class StudentController {
 
         postOffer.saveApplication(application);
 
-        String enterpriseMsg = "New application received for the offer: " + offer.getTitle();
+        String enterpriseMsg = " Nouvelle candidature reçu pour l'offre: " + offer.getTitle();
         notificationInterface.sendNotification(enterprise, enterpriseMsg);
 
         return ResponseEntity.ok(postOfferMapper.toDto(application));
@@ -208,14 +188,14 @@ public class StudentController {
         
         if (student.isOnInternship()) {
             return ResponseEntity.ok().body(Map.of(
-                "inInternship", true,
+                "onInternship", true,
                 "message", "Vous êtes en stage",
                 "canApply", false
             ));
         }
         
         return ResponseEntity.ok().body(Map.of(
-            "inInternship", false,
+            "onInternship", false,
             "message", "Vous pouvez candidater aux offres",
             "canApply", true
         ));

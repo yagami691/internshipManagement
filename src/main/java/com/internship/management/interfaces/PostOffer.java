@@ -40,12 +40,6 @@ public interface PostOffer {
 
     List<Student> getStudentsByDepartment(String department);
 
-    List<Offer> getOfferPaying(boolean paying);
-
-    List<Offer> getOfferRemote(boolean remote);
-
-    List<Offer> getOfferByPayingAndRemote(boolean paying, boolean remote);
-
     Logo getLogoByEnterprise(Enterprise enterprise);
 
     Convention getConventionByOfferId(Long offerId);

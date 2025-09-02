@@ -11,7 +11,11 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StudentApplicationDto {
 
+    private Long id;
     private String name;
     private String firstName;
     private String email;
+    private boolean onInternship;
+    private String department;
+    private String sector;
 }
