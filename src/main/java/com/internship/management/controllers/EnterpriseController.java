@@ -110,7 +110,7 @@ public class EnterpriseController {
         if(approved){
 
             application.setState(ApplicationState.APPROVED);
-            msg = "Ta candidature a été " + application.getState() + " et examiner par l'entreprise " +
+            msg = "Votre candidature a été approuvée et examiner par l'entreprise " +
                     enterprise.getName();
             notificationInterface.sendNotification(student, msg);
             log.info("Application has been {} ",  application.getState());
@@ -118,7 +118,7 @@ public class EnterpriseController {
         }else{
 
             application.setState(ApplicationState.REJECTED);
-            msg = "Ta candidature a été " + application.getState() + " et examiner par l'entreprise " +
+            msg = "Votre candidature a été rejetée et examiner par l'entreprise " +
                     enterprise.getName();
             notificationInterface.sendNotification(student, msg);
         }
@@ -131,20 +131,5 @@ public class EnterpriseController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
         return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
-    }
-
-    @GetMapping("/getEnterpriseLogo")
-    public ResponseEntity<byte[]> getEnterpriseLogo() {
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
-
-        Logo logo = postOffer.getLogoByEnterprise(enterprise);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(logo.getContentType()));
-
-        return new ResponseEntity<>(logo.getLogo(), headers, HttpStatus.OK);
     }
 }

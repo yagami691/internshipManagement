@@ -3,12 +3,16 @@ package com.internship.management.controllers;
 
 import com.internship.management.entities.Application;
 import com.internship.management.entities.Convention;
+import com.internship.management.entities.Enterprise;
+import com.internship.management.entities.Logo;
 import com.internship.management.interfaces.PostOffer;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,4 +60,18 @@ public class DownloadFilesController {
                 .body(application.getCoverLetter());
     }
 
+    @GetMapping("/getEnterpriseLogo")
+    public ResponseEntity<byte[]> getEnterpriseLogo() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+
+        Logo logo = postOffer.getLogoByEnterprise(enterprise);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(logo.getContentType()));
+
+        return new ResponseEntity<>(logo.getLogo(), headers, HttpStatus.OK);
+    }
 }
