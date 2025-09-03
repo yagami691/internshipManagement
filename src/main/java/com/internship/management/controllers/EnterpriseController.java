@@ -67,7 +67,7 @@ public class EnterpriseController {
         List<Teacher> teachers = postOffer.getTeachersByDepartment(offer.getDomain());
 
         for (Teacher teacher : teachers ) {
-            notificationInterface.sendNotification(teacher, "Nouvelle arrivage d'offres");
+            notificationInterface.sendNotification(teacher, "Nouvel arrivage d'offres");
         }
 
         return ResponseEntity.ok(postOfferMapper.toDto(offer));

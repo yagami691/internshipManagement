@@ -134,9 +134,14 @@ public class StudentController {
         if(applicationAccepted) {
 
             student.setOnInternship(true);
-            application.setStudent(student);
             postOffer.saveUser(student);
+
+            application.setStudent(student);
             postOffer.saveApplication(application);
+            
+            log.info("Student {} accepted internship for application {}", student.getEmail(), application_id);
+        } else {
+            log.info("Student {} rejected internship for application {}", student.getEmail(), application_id);
         }
 
         return ResponseEntity.ok(postOfferMapper.toDto(application));

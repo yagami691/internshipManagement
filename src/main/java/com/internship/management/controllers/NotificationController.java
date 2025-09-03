@@ -43,9 +43,9 @@ public class NotificationController {
     public ResponseEntity<String> markAsSeen(@PathVariable Long id) {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
+        Users user = postOffer.getUserByEmail(email);
 
-        notificationInterface.markAsSeen(id, enterprise);
+        notificationInterface.markAsSeen(id, user);
 
         return ResponseEntity.ok("Notification marked as seen");
     }
