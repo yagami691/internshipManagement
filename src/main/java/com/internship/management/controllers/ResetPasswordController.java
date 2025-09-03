@@ -1,11 +1,7 @@
 package com.internship.management.controllers;
 
 import com.internship.management.dto.ResetPasswordRequestDto;
-import com.internship.management.dto.UserResponseDto;
 import com.internship.management.dto.registration.TokenVerificationRequestDto;
-import com.internship.management.entities.Enterprise;
-import com.internship.management.entities.Student;
-import com.internship.management.entities.Teacher;
 import com.internship.management.entities.Users;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.services.registrationService.VerificationTokenService;

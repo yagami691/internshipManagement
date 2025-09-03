@@ -41,7 +41,7 @@ public class Users {
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL)
     private List<Notification> messages = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private VerificationToken verificationToken;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<VerificationToken>  verificationTokens = new ArrayList<>();
 
 }
