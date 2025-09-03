@@ -18,8 +18,6 @@ public class RegistrationServiceImpl implements InternshipService {
     private final TeacherRepository teacherRepository;
     private final VerificationTokenService verificationTokenService;
     private final UsersRepository userRepository;
-    private final LogoRepository logoRepository;
-
 
     @Transactional
    public void registerEnterprise(Enterprise enterprise) {

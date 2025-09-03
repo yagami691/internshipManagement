@@ -1,9 +1,7 @@
 package com.internship.management.controllers;
 
 
-import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.entities.*;
-import com.internship.management.mappers.PostOfferMapper;
 import com.internship.management.mappers.RegistrationMapper;
 import com.internship.management.dto.UserResponseDto;
 import com.internship.management.dto.registration.EnterpriseRegistrationRequestDto;
@@ -30,7 +28,6 @@ public class registrationController {
     private final RegistrationMapper registrationMapper;
     private final VerificationTokenService verificationTokenService;
     private final PasswordEncoder passwordEncoder;
-    private final PostOfferMapper postOfferMapper;
 
     @PostMapping("/registerEnterprise")
     public ResponseEntity<String> create(@Valid @ModelAttribute EnterpriseRegistrationRequestDto enterpriseRequestDto) throws IOException {

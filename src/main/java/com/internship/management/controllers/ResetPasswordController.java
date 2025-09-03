@@ -1,9 +1,17 @@
 package com.internship.management.controllers;
 
 import com.internship.management.dto.ResetPasswordRequestDto;
+import com.internship.management.dto.UserResponseDto;
+import com.internship.management.dto.registration.TokenVerificationRequestDto;
+import com.internship.management.entities.Enterprise;
+import com.internship.management.entities.Student;
+import com.internship.management.entities.Teacher;
 import com.internship.management.entities.Users;
 import com.internship.management.interfaces.PostOffer;
+import com.internship.management.services.registrationService.VerificationTokenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +22,29 @@ public class ResetPasswordController {
 
     private final PostOffer postOffer;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationTokenService verificationTokenService;
+
+    @PostMapping("/sendTokenWhenResetting")
+    public ResponseEntity<String> sendTokenWhenResetting(@RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
+
+        Users user = postOffer.getUserByEmail(resetPasswordRequestDto.getEmail());
+        verificationTokenService.createAndSendToken(user);
+
+        return ResponseEntity.ok("token was sent to " + user.getName() +  " for verification");
+    }
+
+    @PostMapping("/verifyEmail")
+    public ResponseEntity<String> verifyEmail(@Valid @RequestBody TokenVerificationRequestDto request) {
+
+       try{
+           Users userVerified = verificationTokenService.verifyCode(request.getEmail(), request.getToken());
+
+       }catch(Exception e){
+           ResponseEntity.badRequest().body(e.getMessage());
+       }
+
+       return ResponseEntity.ok("token verified");
+    }
 
     @PatchMapping
     public void resetPassword(@RequestBody ResetPasswordRequestDto resetPasswordRequestDto) {
