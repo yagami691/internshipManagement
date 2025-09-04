@@ -134,24 +134,24 @@ public class EnterpriseController {
     public ResponseEntity<String> updateContact(@RequestBody UpdateEnterpriseProfile updateEnterpriseProfile) {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
 
-        user.setEmail(updateEnterpriseProfile.getContact());
-        postOffer.saveUser(user);
+        enterprise.setContact(updateEnterpriseProfile.getContact());
+        postOffer.saveUser(enterprise);
 
-        return ResponseEntity.ok().body(user.getName() + " updated contact successfully");
+        return ResponseEntity.ok().body(enterprise.getName() + " updated contact successfully");
     }
 
     @PatchMapping("/updateLocation")
     public ResponseEntity<String> updateLocation(@RequestBody UpdateEnterpriseProfile updateEnterpriseProfile) {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
+        Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
 
-        user.setEmail(updateEnterpriseProfile.getLocation());
-        postOffer.saveUser(user);
+        enterprise.setLocation(updateEnterpriseProfile.getLocation());
+        postOffer.saveUser(enterprise);
 
-        return ResponseEntity.ok().body(user.getName() + " updated location successfully");
+        return ResponseEntity.ok().body(enterprise.getName() + " updated location successfully");
     }
 
     @PutMapping("/updateLogo/{enterpriseId}")

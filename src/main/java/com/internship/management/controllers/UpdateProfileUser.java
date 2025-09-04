@@ -67,6 +67,12 @@ public class UpdateProfileUser {
         return ResponseEntity.ok( user.getName() + " deleted successfully");
     }
 
+    @DeleteMapping("/deleteAccount/{userId}")
+    public ResponseEntity<String> deleteUserById(@PathVariable Long userId){
+        postOffer.deleteUser(userId);
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
     @PutMapping("/verifyPassword")
     public ResponseEntity<String> verifyPassword(@RequestBody PasswordRequestDto passwordRequestDto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
