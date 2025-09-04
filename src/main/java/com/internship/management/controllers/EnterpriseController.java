@@ -5,6 +5,7 @@ import com.internship.management.dto.application.ApplicationResponseDto;
 import com.internship.management.dto.postOffer.EnterpriseResponseDto;
 import com.internship.management.dto.postOffer.OfferRequestDto;
 import com.internship.management.dto.postOffer.OfferResponseDto;
+import com.internship.management.dto.profile.UpdateEnterpriseProfile;
 import com.internship.management.entities.*;
 import com.internship.management.enums.ApplicationState;
 import com.internship.management.interfaces.NotificationInterface;
@@ -12,10 +13,7 @@ import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@Slf4j
+
 @RestController
 @RequestMapping(path = "api/enterprise")
 @RequiredArgsConstructor
@@ -113,7 +111,6 @@ public class EnterpriseController {
             msg = "Votre candidature a été approuvée et examiner par l'entreprise " +
                     enterprise.getName();
             notificationInterface.sendNotification(student, msg);
-            log.info("Application has been {} ",  application.getState());
 
         }else{
 
@@ -131,5 +128,45 @@ public class EnterpriseController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Enterprise enterprise = postOffer.getByEnterpriseEmail(email);
         return ResponseEntity.ok(postOfferMapper.toDtoEnterprise(enterprise));
+    }
+
+    @PatchMapping("/updateContact")
+    public ResponseEntity<String> updateContact(@RequestBody UpdateEnterpriseProfile updateEnterpriseProfile) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setEmail(updateEnterpriseProfile.getContact());
+        postOffer.saveUser(user);
+
+        return ResponseEntity.ok().body(user.getName() + " updated contact successfully");
+    }
+
+    @PatchMapping("/updateLocation")
+    public ResponseEntity<String> updateLocation(@RequestBody UpdateEnterpriseProfile updateEnterpriseProfile) {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = postOffer.getUserByEmail(email);
+
+        user.setEmail(updateEnterpriseProfile.getLocation());
+        postOffer.saveUser(user);
+
+        return ResponseEntity.ok().body(user.getName() + " updated location successfully");
+    }
+
+    @PutMapping("/updateLogo/{enterpriseId}")
+    public ResponseEntity<String> updateLogo(
+            @PathVariable Long enterpriseId,
+            @RequestParam("file") MultipartFile file) {
+
+        try {
+
+            postOffer.updateLogo(enterpriseId, file);
+            return ResponseEntity.ok("Logo updated successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error: " + e.getMessage());
+        }
     }
 }

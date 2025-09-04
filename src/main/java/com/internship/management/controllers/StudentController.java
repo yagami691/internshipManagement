@@ -41,8 +41,6 @@ public class StudentController {
         Student student = postOffer.getStudentByEmail(email);
 
         List<Offer> offers = postOffer.getOffersByStatusAndConventionApproved(OfferStatus.APPROVED, ConventionState.APPROVED, student.getDepartment());
-        log.info("value {} ", student.isOnInternship());
-        log.info("value {} ", student.getName());
 
         return student.isOnInternship() ? List.of() : postOfferMapper.toDtoList(offers);
     }
@@ -138,10 +136,7 @@ public class StudentController {
 
             application.setStudent(student);
             postOffer.saveApplication(application);
-            
-            log.info("Student {} accepted internship for application {}", student.getEmail(), application_id);
-        } else {
-            log.info("Student {} rejected internship for application {}", student.getEmail(), application_id);
+
         }
 
         return ResponseEntity.ok(postOfferMapper.toDto(application));
