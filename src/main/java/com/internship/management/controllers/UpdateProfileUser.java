@@ -28,7 +28,7 @@ public class UpdateProfileUser {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Users user = postOffer.getUserByEmail(email);
 
-        user.setPassword(passwordRequestDto.getPassword());
+        user.setPassword(passwordEncoder.encode(passwordRequestDto.getPassword()));
         postOffer.saveUser(user);
         return ResponseEntity.ok().body("password updated successfully");
     }

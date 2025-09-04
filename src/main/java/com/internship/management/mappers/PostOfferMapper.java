@@ -54,6 +54,8 @@ public interface PostOfferMapper {
         dto.setMatriculation(e.getMatriculation());
         dto.setCountry(e.getCountry());
         dto.setCity(e.getCity());
+        dto.setContact(e.getContact());
+        dto.setLocation(e.getLocation());
         dto.setHasLogo(hasLogoDto);
         dto.setInPartnership(e.isInPartnership());
         dto.setSectorOfActivity(e.getSectorOfActivity());

@@ -19,6 +19,8 @@ public class EnterpriseResponseDto {
     private String matriculation;
     private String country;
     private String city;
+    private String contact;
+    private String location;
     private HasLogoDto hasLogo;
     private List<MiniOfferResponseDto> offers;
 }
