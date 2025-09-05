@@ -83,39 +83,4 @@ public class VerificationTokenService {
 
         mailSender.send(message);
     }
-
-    public void sendMsgToUser(String toEmail, Users user){
-
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        String subject = "";
-        String content = "";
-
-        if(user instanceof Enterprise){
-
-            subject = "Offer validation";
-            content = "Dear " + user.getName() + "," + "\n" +
-            "\n" + "We would like to inform you that your internship offer has been reviewed.\n";
-
-        }
-        if(user instanceof Student) {
-
-            subject = "New Offer Approved";
-            content = "Dear " + user.getName() + "," + "\n" +
-                    "\n" + "We would like to inform you that one internship offer has been " +
-                    "approved by a teacher of your department.\n";
-        }
-        if(user instanceof Teacher) {
-
-            subject = "New Offer Arrival";
-            content = "Dear " + user.getName() + "," + "\n" +
-                    "\n" + "We would like to inform you there is a new offer to review regarding your department.\n";
-        }
-
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(content + " \n\nBest regards, Internship Platform.");
-
-        mailSender.send(message);
-    }
 }

@@ -57,16 +57,6 @@ public class UpdateProfileUser {
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping("/deleteUserAccount")
-    public ResponseEntity<String> delete(){
-
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Users user = postOffer.getUserByEmail(email);
-        postOffer.deleteUser(user.getId());
-
-        return ResponseEntity.ok( user.getName() + " deleted successfully");
-    }
-
     @DeleteMapping("/deleteAccount/{userId}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long userId){
         postOffer.deleteUser(userId);

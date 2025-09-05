@@ -14,7 +14,6 @@ import com.internship.management.interfaces.PostOffer;
 import com.internship.management.mappers.PostOfferMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping(path = "api/student")
 @RequiredArgsConstructor
-@Slf4j
 @SecurityRequirement(name = "JWT")
 public class StudentController {
 
