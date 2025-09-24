@@ -17,7 +17,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s.department AS department, COUNT(s) AS count " +
             "FROM Student s WHERE s.onInternship = true " +
             "GROUP BY s.department")
-
     List<DepartmentInternshipStat> countInternsByDepartment();
 
     List<Student> findByDepartment(String department);
