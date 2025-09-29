@@ -88,9 +88,16 @@ public interface PostOfferMapper {
     default StudentApplicationDto mapApplicationStudent(Student s){
 
         StudentApplicationDto dto = new StudentApplicationDto();
+        dto.setId(s.getId());
         dto.setEmail(s.getEmail());
         dto.setName(s.getName());
         dto.setFirstName(s.getFirstName());
+        dto.setOnInternship(s.isOnInternship());
+        dto.setDepartment(s.getDepartment());
+        dto.setSector(s.getSector());
+        dto.setGithubLink(s.getGithubLink());
+        dto.setLinkedinLink(s.getLinkedinLink());
+        dto.setLanguages(s.getLanguages());
 
         return dto;
     }

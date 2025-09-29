@@ -207,4 +207,21 @@ public class StudentController {
         StudentResponseDto profileDto = postOfferMapper.toDtoStudent(student);
         return ResponseEntity.ok(profileDto);
     }
+    
+    @GetMapping("/currentInternship")
+    public ResponseEntity<ApplicationResponseDto> getCurrentInternship() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Student student = postOffer.getStudentByEmail(email);
+        
+        if (!student.isOnInternship()) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        Application currentInternship = postOffer.getApplicationByStudentOnInternshipTrue(student);
+        if (currentInternship == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        return ResponseEntity.ok(postOfferMapper.toDto(currentInternship));
+    }
 }

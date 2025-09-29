@@ -18,4 +18,7 @@ public class StudentApplicationDto {
     private boolean onInternship;
     private String department;
     private String sector;
+    private String githubLink;
+    private String linkedinLink;
+    private java.util.List<String> languages;
 }
