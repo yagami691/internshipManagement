@@ -12,7 +12,7 @@ This API uses JSON Web Token **(JWT) authentication**. Include the token in the 
 
 ## Installation & Setup
 
-**CREATE DATABASE internship;**
+``CREATE DATABASE internship;``
 
 ### 1-Update your application.properties
 
@@ -25,7 +25,7 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 ```
 ### 2- Build the project
 
-**mvn clean install**
+``mvn clean install``
 
 ## Technology Stack
 
