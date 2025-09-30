@@ -8,17 +8,44 @@ RESTful API for the internship management platform, allowing students, companies
 
 This API uses JSON Web Token **(JWT) authentication**. Include the token in the request header:
 
+**Authorization: Bearer YOUR_JWT_TOKEN**
+
+## Installation & Setup
+
+**CREATE DATABASE internship;**
+
+### 1-Update your application.properties
+
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/internship
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
+### 2- Build the project
+
+**mvn clean install**
 
 ## Technology Stack
 
 - **Backend**: Spring Boot, Spring Security, JPA/Hibernate
 - **Mapping**: MapStruct
 - **Authentification**: JWT (io.jsonwebtoken)
-- **Base de données**: PostgreSQL
-- **Utilitaires**: Lombok
-- **Sécurité**: Spring Security
-- **Version Java**: 17+
-- **Frontend**: HTML, React.js
+- **DataBase**: PostgreSQL
+- **Utilities**: Lombok
+- **Security**: Spring Security
+- **Java Version**: 17+
+- **Frontend**: Vite, React.js
+
+## Default Admin Credentials
+```
+{
+  "email": "admin@admin.com",
+  "password": "admin123"
+}
+
+```
 
 ## Main Endpoints 
 
@@ -66,16 +93,17 @@ This API uses JSON Web Token **(JWT) authentication**. Include the token in the 
 
 ### connection
 
-```http
+```
 POST http://localhost:8080/login
 Content-Type: application/json
 
 {
   "email": "admin@email.com",
-  "password": "admin"
+  "password": "admin123"
 }
 
-// Response
+ Response
+ 
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
@@ -88,10 +116,10 @@ Authorization: Bearer YOUR_JWT_TOKEN
 Content-Type: application/json
 
 {
-  "title": "Développeur FullStack",
-  "description": "Développement d'applications web",
-  "domain": "Informatique",
-  "job": "Développeur",
+  "title": "FullStack Developer",
+  "description": "Web Application Development",
+  "domain": "Computer Science",
+  "job": "Developer",
   "numberOfPlaces": 2,
   "paying": true,
   "remote": false
