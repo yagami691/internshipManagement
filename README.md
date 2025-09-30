@@ -51,43 +51,43 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 ### 1. Authentication
 
-| Méthode | Endpoint | Description                |
-|---------|----------|----------------------------|
-| POST | `/registration/registerStudent` | Registration of student    |
-| POST | `/registration/registerTeacher` | Registration of teacher    |
-| POST | `/registration/registerEnterprise` | Registration of enterprise |
-| POST | `/login` | Connection of user         |
+| Method | Endpoint | Description                |
+|--------|----------|----------------------------|
+| POST   | `/registration/registerStudent` | Registration of student    |
+| POST   | `/registration/registerTeacher` | Registration of teacher    |
+| POST   | `/registration/registerEnterprise` | Registration of enterprise |
+| POST   | `/login` | Connection of user         |
 
 ### 2. Student Management
 
-| Méthode | Endpoint | Description                     |
-|---------|----------|---------------------------------|
-| PUT | `/api/student/{application_id}/updateStudentStatus` | Update the status of student    |
-| POST | `/api/student/{offer_id}/createApplication` | Create of application           |
-| GET | `/api/student/pendingApplicationsOfStudent` | Pending applications of student |
+| Method | Endpoint | Description                     |
+|--------|----------|---------------------------------|
+| PUT    | `/api/student/{application_id}/updateStudentStatus` | Update the status of student    |
+| POST   | `/api/student/{offer_id}/createApplication` | Create of application           |
+| GET    | `/api/student/pendingApplicationsOfStudent` | Pending applications of student |
 
 ### 3. Companies Management
 
-| Méthode | Endpoint | Description                |
-|---------|----------|----------------------------|
-| PUT | `/api/enterprise/application/{id}/validate` | Validate an application    |
-| POST | `/api/enterprise/createOffer` | Create an internship offer |
-| GET | `/api/enterprise/listOfOffers` | List of enterprise offers  |
+| Method | Endpoint | Description                |
+|--------|----------|----------------------------|
+| PUT    | `/api/enterprise/application/{id}/validate` | Validate an application    |
+| POST   | `/api/enterprise/createOffer` | Create an internship offer |
+| GET    | `/api/enterprise/listOfOffers` | List of enterprise offers  |
 
 ### 4. Teachers Management
 
-| Méthode | Endpoint | Description                       |
-|---------|----------|-----------------------------------|
-| PUT | `/api/teacher/offers/{id}/validate` | Validate an offer and  convention |
-| GET | `/api/teacher/offersApprovedByTeacher` | Offer approved by teacher         |
+| Method | Endpoint | Description                       |
+|--------|----------|-----------------------------------|
+| PUT    | `/api/teacher/offers/{id}/validate` | Validate an offer and  convention |
+| GET    | `/api/teacher/offersApprovedByTeacher` | Offer approved by teacher         |
 
 ### 5. Administration
 
-| Méthode | Endpoint | Description                       |
-|---------|----------|-----------------------------------|
-| PUT | `/api/admin/Enterprise/{id}/approve` | Approve enterprise                |
-| GET | `/api/admin/internships.xlsx` | Download excel file of internship |
-| GET | `/api/admin/allStudent` | List all students                 |
+| Method | Endpoint | Description                       |
+|--------|----------|-----------------------------------|
+| PUT    | `/api/admin/Enterprise/{id}/approve` | Approve enterprise                |
+| GET    | `/api/admin/internships.xlsx` | Download excel file of internship |
+| GET    | `/api/admin/allStudent` | List all students                 |
 
 ## Examples of Use
 
