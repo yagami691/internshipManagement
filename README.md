@@ -51,43 +51,43 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 
 ### 1. Authentication
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| POST | `/registration/registerStudent` | Inscription d'un étudiant |
-| POST | `/registration/registerTeacher` | Inscription d'un enseignant |
-| POST | `/registration/registerEnterprise` | Inscription d'une entreprise |
-| POST | `/login` | Connexion utilisateur |
+| Méthode | Endpoint | Description                |
+|---------|----------|----------------------------|
+| POST | `/registration/registerStudent` | Registration of student    |
+| POST | `/registration/registerTeacher` | Registration of teacher    |
+| POST | `/registration/registerEnterprise` | Registration of enterprise |
+| POST | `/login` | Connection of user         |
 
 ### 2. Student Management
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| PUT | `/api/student/{application_id}/updateStudentStatus` | Mettre à jour le statut de l'étudiant |
-| POST | `/api/student/{offer_id}/createApplication` | Créer une candidature |
-| GET | `/api/student/pendingApplicationsOfStudent` | Candidatures en attente de l'étudiant |
+| Méthode | Endpoint | Description                     |
+|---------|----------|---------------------------------|
+| PUT | `/api/student/{application_id}/updateStudentStatus` | Update the status of student    |
+| POST | `/api/student/{offer_id}/createApplication` | Create of application           |
+| GET | `/api/student/pendingApplicationsOfStudent` | Pending applications of student |
 
 ### 3. Companies Management
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| PUT | `/api/enterprise/application/{id}/validate` | Valider une candidature |
-| POST | `/api/enterprise/createOffer` | Créer une offre de stage |
-| GET | `/api/enterprise/listOfOffers` | Liste des offres de l'entreprise |
+| Méthode | Endpoint | Description                |
+|---------|----------|----------------------------|
+| PUT | `/api/enterprise/application/{id}/validate` | Validate an application    |
+| POST | `/api/enterprise/createOffer` | Create an internship offer |
+| GET | `/api/enterprise/listOfOffers` | List of enterprise offers  |
 
 ### 4. Teachers Management
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| PUT | `/api/teacher/offers/{id}/validate` | Valider une offre et convention |
-| GET | `/api/teacher/offersApprovedByTeacher` | Offres approuvées par l'enseignant |
+| Méthode | Endpoint | Description                       |
+|---------|----------|-----------------------------------|
+| PUT | `/api/teacher/offers/{id}/validate` | Validate an offer and  convention |
+| GET | `/api/teacher/offersApprovedByTeacher` | Offer approved by teacher         |
 
 ### 5. Administration
 
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| PUT | `/api/admin/Enterprise/{id}/approve` | Approuver une entreprise |
-| GET | `/api/admin/internships.xlsx` | Télécharger Excel des stages |
-| GET | `/api/admin/allStudent` | Tous les étudiants |
+| Méthode | Endpoint | Description                       |
+|---------|----------|-----------------------------------|
+| PUT | `/api/admin/Enterprise/{id}/approve` | Approve enterprise                |
+| GET | `/api/admin/internships.xlsx` | Download excel file of internship |
+| GET | `/api/admin/allStudent` | List all students                 |
 
 ## Examples of Use
 
