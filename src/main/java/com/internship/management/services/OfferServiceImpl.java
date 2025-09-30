@@ -58,7 +58,7 @@ public class OfferServiceImpl implements PostOffer {
     }
 
     public List<Enterprise> getEnterpriseByPartnershipFalse(){
-        return enterpriseRepository.findByInPartnershipFalse();
+        return enterpriseRepository.findByInPartnershipFalseAndEmailVerifiedTrue();
     }
 
     public List<Enterprise> getEnterpriseByPartnershipTrue(){
