@@ -3,6 +3,7 @@ package com.internship.management.services;
 
 import com.internship.management.entities.*;
 import com.internship.management.enums.ConventionState;
+import com.internship.management.enums.EnterpriseState;
 import com.internship.management.enums.OfferStatus;
 import com.internship.management.interfaces.PostOffer;
 import com.internship.management.repositories.*;
@@ -57,8 +58,8 @@ public class OfferServiceImpl implements PostOffer {
                 .orElseThrow(() -> new RuntimeException("Enterprise Not Found"));
     }
 
-    public List<Enterprise> getEnterpriseByPartnershipFalse(){
-        return enterpriseRepository.findByInPartnershipFalseAndEmailVerifiedTrue();
+    public List<Enterprise> getEnterpriseByPartnershipFalse( EnterpriseState state){
+        return enterpriseRepository.findByInPartnershipFalseAndEmailVerifiedTrueAndEnterpriseState(state);
     }
 
     public List<Enterprise> getEnterpriseByPartnershipTrue(){

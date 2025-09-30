@@ -2,6 +2,7 @@ package com.internship.management.interfaces;
 
 import com.internship.management.entities.*;
 import com.internship.management.enums.ConventionState;
+import com.internship.management.enums.EnterpriseState;
 import com.internship.management.enums.OfferStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public interface PostOffer {
 
     Convention getConventionByOfferId(Long offerId);
 
-    List<Enterprise> getEnterpriseByPartnershipFalse();
+    List<Enterprise> getEnterpriseByPartnershipFalse(EnterpriseState state);
 
     List<Offer> getOfferByDepartmentAndPendingOfferStatusAndInPartnershipTrue(String department, OfferStatus offerStatus);
 

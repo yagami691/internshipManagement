@@ -1,7 +1,7 @@
 package com.internship.management.repositories;
 
 import com.internship.management.entities.Enterprise;
-import com.internship.management.entities.Offer;
+import com.internship.management.enums.EnterpriseState;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ public interface EnterpriseRepository extends JpaRepository<Enterprise,Long> {
 
     Optional<Enterprise> findByEmail(String email);
 
-    List<Enterprise> findByInPartnershipFalseAndEmailVerifiedTrue();
+    List<Enterprise> findByInPartnershipFalseAndEmailVerifiedTrueAndEnterpriseState(EnterpriseState state);
 
     List<Enterprise> findByInPartnershipTrue();
 

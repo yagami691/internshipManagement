@@ -52,7 +52,14 @@ public class AdminController {
     @GetMapping("/approvalPendingEnterprise")
     public List<EnterpriseResponseDto> getPendingValidationEnterprise(){
 
-        List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnershipFalse();
+        List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnershipFalse(EnterpriseState.PENDING);
+        return postOfferMapper.toDtoEnterpriseList(listOfEnterprise);
+    }
+
+    @GetMapping("/EnterpriseRejected")
+    public List<EnterpriseResponseDto> getEnterpriseRejected(){
+
+        List<Enterprise> listOfEnterprise = postOffer.getEnterpriseByPartnershipFalse(EnterpriseState.REJECTED);
         return postOfferMapper.toDtoEnterpriseList(listOfEnterprise);
     }
 
